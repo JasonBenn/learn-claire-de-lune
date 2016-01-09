@@ -95,7 +95,6 @@ const whiteKeysDistance = code => {
 
 const drawNotes = () => {
   each(notes, ({ code, time, color }) => {
-    console.log(whiteKeysDistance(code))
     const noteTop = STAFF_TOP - whiteKeysDistance(code) * GAP_BETWEEN_LINES / 2
     drawNote(time * 0.1, noteTop, color)
   })
@@ -109,15 +108,15 @@ const drawTranslated = (panX, panY = 0) => {
   drawNotes()
 }
 
-let errorsOffset = 0
+let errorTime = 0
 let currentTime = 0
 
-$(document).click(() => currentTime -= 1000) // ms
+$(document).click(() => errorTime -= 300) // ms
 
 
 const scroll = (startTime) => {
   currentTime = (Date.now() - startTime)
-  drawTranslated(-currentTime * 0.1)
+  drawTranslated(-currentTime * 0.1 - errorTime)
   requestAnimationFrame(partial(scroll, startTime))
 }
 
