@@ -2,6 +2,13 @@ import 'normalize.css'
 import './styles.scss'
 import { floor, range, partial, each, filter, find, pluck } from 'lodash'
 import $ from 'jquery'
+import NOTES from './notes'
+
+// import midiFileParser from 'midi-file-parser'
+
+// const file = require('fs').readFileSync('deb_clai.mid', 'binary')
+// const midi = midiFileParser(file);
+
 
 const canvas = document.getElementById("sheet-music");
 const ctx = canvas.getContext("2d");
@@ -10,7 +17,7 @@ const ch = canvas.height;
 const GREEN = '#bada55'
 const STAFF_TOP = 100.5
 const LEFT_BOUND = 100
-const RIGHT_BOUND = 900
+const RIGHT_BOUND = 10000
 const GAP_BETWEEN_LINES = 20
 
 const noteRadius = 10;
@@ -32,20 +39,6 @@ const drawLine = (x1, y1, x2, y2) => {
   ctx.closePath();
 }
 
-let notes = [
-  { code: 77, time: 1100 },
-  { code: 75, time: 2000 },
-  { code: 60, time: 2500 },
-  { code: 59, time: 2800 },
-  { code: 57, time: 3100 },
-  { code: 63, time: 2500 },
-  { code: 66, time: 2500 },
-  { code: 73, time: 4000 },
-  { code: 68, time: 4000 },
-  { code: 60, time: 4000 },
-  { code: 80, time: 4000 },
-]
-
 const drawStaff = () => {
   each(range(0, 5), step => {
     const y = STAFF_TOP + GAP_BETWEEN_LINES * step
@@ -66,39 +59,28 @@ const whiteKeysDistance = code => {
   return [0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6][inOctave] + outOfOctave
 }
 
-// console.log('eb', whiteKeysDistance(75) === -1)
-// console.log('e', whiteKeysDistance(76) === -1)
-// console.log('f', whiteKeysDistance(77) === 0)
-// console.log('gb', whiteKeysDistance(78) === 1)
-// console.log('g', whiteKeysDistance(79) === 1)
-// console.log('ab', whiteKeysDistance(80) === 2)
-// console.log('a', whiteKeysDistance(81) === 2)
-// console.log('bb', whiteKeysDistance(82) === 3)
-// console.log('b', whiteKeysDistance(83) === 3)
-// console.log('c', whiteKeysDistance(84) === 4)
-// console.log('db', whiteKeysDistance(85) === 5)
-// console.log('d', whiteKeysDistance(86) === 5)
-// console.log('eb', whiteKeysDistance(87) === 6)
-// console.log('e', whiteKeysDistance(88) === 6)
-// console.log('f', whiteKeysDistance(89) === 7)
-// console.log('gb', whiteKeysDistance(90) === 8)
-// console.log('g', whiteKeysDistance(91) === 8)
-// console.log('ab', whiteKeysDistance(92) === 9)
-// console.log('a', whiteKeysDistance(93) === 9)
-// console.log('bb', whiteKeysDistance(94) ===10)
-// console.log('b', whiteKeysDistance(95) ===10)
-// console.log('c', whiteKeysDistance(96) ===11)
-// console.log('db', whiteKeysDistance(97) ===12)
-// console.log('d', whiteKeysDistance(98) ===12)
-// console.log('eb', whiteKeysDistance(99) ===13)
-// console.log('e', whiteKeysDistance(100) ===13)
-
 const drawNotes = () => {
-  each(notes, ({ code, time, color }) => {
+  each(NOTES, ({ code, time, color }) => {
     const noteTop = STAFF_TOP - whiteKeysDistance(code) * GAP_BETWEEN_LINES / 2
     drawNote(time * 0.1, noteTop, color)
   })
 }
+
+
+// 120 bpm is the number of quarter notes in 60 seconds.
+// 2 quarter notes per second.
+
+// 100px.
+
+// I can control how far apart to place quarter notes.
+// 9 eighth notes should cover 300px.
+// Ah, fuck, MIDI will have its own timing markings.
+
+// I need to open a new MIDI file.
+
+// I'm translating milliseconds to pixels.
+// I can change the
+
 
 const drawTranslated = (panX, panY = 0) => {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -122,7 +104,7 @@ const scroll = (startTime) => {
 
 const onMidiMessage = (msg, correctCb, incorrectCb) => {
   const [eventType, midiKeyCode, velocity] = msg.data
-  const currentNotes = filter(notes, ({ time }) => currentTime < time && time < currentTime + 1000)
+  const currentNotes = filter(NOTES, ({ time }) => currentTime < time && time < currentTime + 1000)
   const playedNote = find(currentNotes, ({ code }) => code === midiKeyCode )
   // TODO
 }
