@@ -6,6 +6,10 @@ import DrawMusic from './draw'
 import SongReader, { MidiNote } from './song-reader'
 import Piano from './piano'
 
+let paused = false
+
+$(document).click(() => paused = !paused)
+
 class Trainer {
   constructor() {
     var canvas = document.getElementById("sheet-music")
@@ -16,7 +20,9 @@ class Trainer {
     this.incorrectNotesCount = 0
     this.correctNotesCount = 0
 
-    $(document).click(() => this.errorTime -= 300)
+    this.historicalPanX = 0
+    this.unpause()
+    $(document).click(() => this.paused ? this.unpause() : this.pause())
   }
 
   connectToPiano() {
@@ -45,11 +51,30 @@ class Trainer {
     this.draw.notes(_.values(this.incorrectNotes), panX - 500)
   }
 
-  render(startTime) {
-    this.currentTime = (Date.now() - startTime)
-    const panX = -this.currentTime * 0.1 - this.errorTime
-    this.renderTranslated(panX)
-    requestAnimationFrame(partial(this.render.bind(this), startTime))
+  currentPanX() {
+    return (this.lastUnpausedTime - Date.now()) * 0.1
+  }
+
+  pause() {
+    this.historicalPanX += this.currentPanX()
+    this.paused = true
+  }
+
+  unpause() {
+    this.lastUnpausedTime = Date.now()
+    this.paused = false
+  }
+
+  render() {
+    let totalPanX
+    if (this.paused) {
+      totalPanX = this.historicalPanX
+    } else {
+      totalPanX = this.historicalPanX + this.currentPanX()
+    }
+
+    this.renderTranslated(totalPanX)
+    requestAnimationFrame(this.render.bind(this))
   }
 
   onMidiMessage(msg, correctCb, incorrectCb) {
