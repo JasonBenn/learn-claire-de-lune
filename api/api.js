@@ -5,7 +5,7 @@ var midiFileParser = require('midi-file-parser');
 var file = require('fs').readFileSync('deb_clai.mid', 'binary')
 var midi = midiFileParser(file);
 
-app.get('/', function (req, res) {
+app.get('/api/claire', function (req, res) {
   res.send(midi);
 })
 
