@@ -1,8 +1,6 @@
 var webpack = require('webpack')
 var path = require('path')
 
-console.log('sup')
-
 module.exports = {
   module: {
     loaders: [
@@ -29,7 +27,7 @@ module.exports = {
   },
 
   entry: {
-    app: ['webpack/hot/dev-server', './src/index.js']
+    app: ['webpack/hot/dev-server', './src/app.js']
   },
 
   output: {

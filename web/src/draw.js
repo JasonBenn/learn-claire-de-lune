@@ -1,9 +1,11 @@
 import _, { each, range } from 'lodash'
 
 const GREEN = '#bada55'
+const RED = '#FF0000'
+const BLACK = '#000'
 const STAFF_TOP = 100.5
-const LEFT_BOUND = 100
-const RIGHT_BOUND = 10000
+const LEFT_BOUND = 0
+const RIGHT_BOUND = 80000
 const GAP_BETWEEN_LINES = 20
 const NOTE_RADIUS = 10;
 
@@ -14,7 +16,7 @@ class Draw {
     this.canvasHeight = canvas.height;
   }
 
-  circle(x, y, color = "#000") {
+  circle(x, y, color) {
     this.ctx.beginPath();
     this.ctx.arc(x, y, NOTE_RADIUS, 0, 2 * Math.PI, false);
     this.ctx.fillStyle = color;
@@ -59,6 +61,11 @@ export default class DrawMusic extends Draw {
     })
   }
 
+  divider(offset) {
+    const x = this.canvasWidth / 2 - offset
+    this.line(x, 0, x, this.canvasHeight)
+  }
+
   whiteKeysDistance(code) {
     const fromBaseKey = code - 77
     let inOctave = fromBaseKey % 12
@@ -67,19 +74,23 @@ export default class DrawMusic extends Draw {
     return [0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6][inOctave] + outOfOctave
   }
 
-  note(noteNumber, time) {
+  note({ noteNumber, playedCorrectly }, time) {
     const noteTop = STAFF_TOP - this.whiteKeysDistance(noteNumber) * GAP_BETWEEN_LINES / 2
-    this.circle(time, noteTop)
+    let color
+
+    if (playedCorrectly === true) color = GREEN
+    if (playedCorrectly === false) color = RED
+    if (playedCorrectly === null) color = BLACK
+    this.circle(time, noteTop, color)
   }
 
-  notes(notes) {
+  notes(notesList, offset = 0) {
     var time = 0
-    notes.some(({ deltaTime, subtype, noteNumber }) => {
-      // Larger than right edge of the screen? Don't display.
-      // if (time > 1200) return true
+    notesList.forEach(midiNote => {
+      const { deltaTime, subtype, noteNumber } = midiNote
       time += deltaTime / 5
       if (subtype === 'noteOn') {
-        this.note(noteNumber, time)
+        this.note(midiNote, time - offset)
       }
     })
   }
