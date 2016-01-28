@@ -8,6 +8,7 @@ import Piano from './piano'
 import { midiKeyCodeToNoteCode, friendlyChord, ticksToPx, msToPx } from './utils'
 
 const PEDAL_CODE = 176
+const TIMING_CLOCK = 248
 const PAN_STARTING_OFFSET_PX = 500
 
 class Trainer {
@@ -89,7 +90,7 @@ class Trainer {
 
   onMidiMessage(msg, correctCb, incorrectCb) {
     const [eventType, noteNumber, velocity] = msg.data
-    if (eventType === PEDAL_CODE) return
+    if (eventType === PEDAL_CODE || eventType === TIMING_CLOCK) return
     const correctNotePlayed = _.find(this.currentChord, note => note.noteNumber === noteNumber)
 
     if (correctNotePlayed) {
