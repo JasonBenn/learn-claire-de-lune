@@ -1,4 +1,5 @@
 import _, { each, range } from 'lodash'
+import { midiKeyCodeToNoteCode, ticksToPx } from './utils'
 
 const GREEN = '#bada55'
 const RED = '#FF0000'
@@ -85,12 +86,12 @@ export default class DrawMusic extends Draw {
   }
 
   notes(notesList, offset = 0) {
-    var time = 0
-    notesList.forEach(midiNote => {
+    var px = 0
+    notesList.forEach((midiNote, i) => {
       const { deltaTime, subtype, noteNumber } = midiNote
-      time += deltaTime / 5
+      px += ticksToPx(deltaTime)
       if (subtype === 'noteOn') {
-        this.note(midiNote, time - offset)
+        this.note(midiNote, px - offset)
       }
     })
   }

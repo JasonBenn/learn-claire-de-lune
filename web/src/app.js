@@ -5,24 +5,24 @@ import $ from 'jquery'
 import DrawMusic from './draw'
 import SongReader, { MidiNote } from './song-reader'
 import Piano from './piano'
+import { midiKeyCodeToNoteCode, friendlyChord, ticksToPx, msToPx } from './utils'
 
-let paused = false
-
-$(document).click(() => paused = !paused)
+const PEDAL_CODE = 176
+const PAN_STARTING_OFFSET_PX = 500
 
 class Trainer {
   constructor() {
     var canvas = document.getElementById("sheet-music")
     this.draw = new DrawMusic(canvas)
+
     this.errorTime = 0
     this.currentTime = 0
+
     this.incorrectNotes = {}
     this.incorrectNotesCount = 0
     this.correctNotesCount = 0
 
-    this.historicalPanX = 0
-    this.unpause()
-    $(document).click(() => this.paused ? this.unpause() : this.pause())
+    this.historicalPanX = PAN_STARTING_OFFSET_PX
   }
 
   connectToPiano() {
@@ -30,16 +30,18 @@ class Trainer {
   }
 
   load(url) {
-    return $.get(url, this.onLoad.bind(this))
+    return $.get(url)
   }
 
   updateChord() {
-    this.currentNotes = this.songReader.getNextChord()
+    this.currentChord = this.songReader.getNextChord()
   }
 
-  onLoad(data) {
+  start(data) {
     this.songReader = new SongReader(data)
     this.updateChord()
+    this.unpause()
+    this.render(Date.now())
   }
 
   renderTranslated(panX, panY = 0) {
@@ -48,16 +50,18 @@ class Trainer {
     this.draw.notes(this.songReader.leftHand)
     this.draw.notes(this.songReader.rightHand)
     this.draw.divider(panX)
-    this.draw.notes(_.values(this.incorrectNotes), panX - 500)
+    this.draw.notes(_.values(this.incorrectNotes), panX)
   }
 
   currentPanX() {
-    return (this.lastUnpausedTime - Date.now()) * 0.1
+    return msToPx(Date.now() - this.lastUnpausedTime || 0)
   }
 
   pause() {
-    this.historicalPanX += this.currentPanX()
+    this.historicalPanX -= this.currentPanX()
     this.paused = true
+
+    console.log('Current chord:', friendlyChord(this.currentChord))
   }
 
   unpause() {
@@ -65,13 +69,19 @@ class Trainer {
     this.paused = false
   }
 
+  currentChordTicks() {
+    return this.songReader.currentChordTicks
+  }
+
+  nextChordPx() {
+    return PAN_STARTING_OFFSET_PX - ticksToPx(this.currentChordTicks())
+  }
+
   render() {
-    let totalPanX
-    if (this.paused) {
-      totalPanX = this.historicalPanX
-    } else {
-      totalPanX = this.historicalPanX + this.currentPanX()
-    }
+    const totalPanX = this.paused ? this.historicalPanX : this.historicalPanX - this.currentPanX()
+
+    if (totalPanX < this.nextChordPx() && !this.paused) this.pause()
+    if (totalPanX > this.nextChordPx() && this.paused) this.unpause()
 
     this.renderTranslated(totalPanX)
     requestAnimationFrame(this.render.bind(this))
@@ -79,7 +89,8 @@ class Trainer {
 
   onMidiMessage(msg, correctCb, incorrectCb) {
     const [eventType, noteNumber, velocity] = msg.data
-    const correctNotePlayed = _.find(this.currentNotes, note => note.noteNumber === noteNumber)
+    if (eventType === PEDAL_CODE) return
+    const correctNotePlayed = _.find(this.currentChord, note => note.noteNumber === noteNumber)
 
     if (correctNotePlayed) {
       if (velocity) {
@@ -99,7 +110,7 @@ class Trainer {
       }
     }
 
-    if (this.correctNotesCount === this.currentNotes.length && !this.incorrectNotesCount) {
+    if (this.correctNotesCount === this.currentChord.length && !this.incorrectNotesCount) {
       this.correctNotesCount = 0
       this.incorrectNotesCount = 0
       this.updateChord()
@@ -110,4 +121,4 @@ class Trainer {
 const trainer = new Trainer()
 trainer.connectToPiano()
   .then(() => trainer.load('api/claire'))
-  .then(() => trainer.render(Date.now()))
+  .then(::trainer.start)

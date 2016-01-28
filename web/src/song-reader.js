@@ -1,3 +1,5 @@
+import { midiKeyCodeToNoteCode } from './utils'
+
 export default class SongReader {
   constructor(midiData) {
     this.rightHand = new MidiTrack(midiData.tracks[1])
@@ -17,15 +19,18 @@ export default class SongReader {
 
   getNextChord() {
     let currentChord
-    if (this.leftHand.absoluteTime === this.rightHand.absoluteTime) {
+    if (this.leftHand.totalTicks === this.rightHand.totalTicks) {
       currentChord = this.currentLeftChord.concat(this.currentRightChord)
+      this.currentChordTicks = this.leftHand.totalTicks
       this.updateLeftChord()
       this.updateRightChord()
-    } else if (this.leftHand.absoluteTime < this.rightHand.absoluteTime) {
+    } else if (this.leftHand.totalTicks < this.rightHand.totalTicks) {
       currentChord = this.currentLeftChord
+      this.currentChordTicks = this.leftHand.totalTicks
       this.updateLeftChord()
     } else {
       currentChord = this.currentRightChord
+      this.currentChordTicks = this.rightHand.totalTicks
       this.updateRightChord()
     }
     return currentChord
@@ -35,12 +40,13 @@ export default class SongReader {
 class MidiTrack {
   constructor(track) {
     this.track = track.map(note => new MidiNote(note))
-    this.cursor = this.firstNoteOn()
-    this.absoluteTime = 0
+    this.cursor = 0
+    this.totalTicks = 0
+    this.advanceToNextNoteOn()
   }
 
-  firstNoteOn() {
-    return this.track.findIndex(note => note.subtype === 'noteOn')
+  advanceToNextNoteOn() {
+    while (this.currentNote().subtype !== 'noteOn') this.advanceCursor()
   }
 
   currentNote() {
@@ -48,12 +54,12 @@ class MidiTrack {
   }
 
   advanceCursor() {
-    this.absoluteTime += this.currentNote().deltaTime
+    this.totalTicks += this.currentNote().deltaTime
     this.cursor += 1
   }
 
   getNextChord() {
-    while (this.currentNote().subtype !== 'noteOn') this.advanceCursor()
+    this.advanceToNextNoteOn()
 
     let currentChord = [this.currentNote()]
     this.advanceCursor()
