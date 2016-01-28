@@ -5,7 +5,7 @@ import $ from 'jquery'
 import DrawMusic from './draw'
 import SongReader, { MidiNote } from './song-reader'
 import Piano from './piano'
-import { midiKeyCodeToNoteCode, friendlyChord, ticksToPx, msToPx, colors } from './utils'
+import { keyNotOnPiano, midiKeyCodeToNoteCode, friendlyChord, ticksToPx, msToPx, colors } from './utils'
 
 const PEDAL_CODE = 176
 const TIMING_CLOCK = 248
@@ -61,8 +61,15 @@ class Trainer {
   pause() {
     this.historicalPanX -= this.currentPanX()
     this.paused = true
+    if (this.currentChordOutOfRange()) {
+      this.updateChord()
+    }
 
     console.log('Current chord:', friendlyChord(this.currentChord))
+  }
+
+  currentChordOutOfRange() {
+    return _.all(this.currentChord.map(note => keyNotOnPiano(note.noteNumber)))
   }
 
   unpause() {
@@ -92,6 +99,7 @@ class Trainer {
     const [eventType, noteNumber, velocity] = msg.data
     if (eventType === PEDAL_CODE || eventType === TIMING_CLOCK) return
     const correctNotePlayed = _.find(this.currentChord, note => note.noteNumber === noteNumber)
+    const currentChordLength = _.reject(this.currentChord, note => keyNotOnPiano(note.noteNumber)).length
 
     if (correctNotePlayed) {
       if (velocity) {
@@ -111,7 +119,7 @@ class Trainer {
       }
     }
 
-    if (this.correctNotesCount === this.currentChord.length && !this.incorrectNotesCount) {
+    if (this.correctNotesCount === currentChordLength && !this.incorrectNotesCount) {
       this.correctNotesCount = 0
       this.incorrectNotesCount = 0
       this.updateChord()

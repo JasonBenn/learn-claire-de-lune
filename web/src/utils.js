@@ -1,3 +1,6 @@
+const LOWEST_NOTE = 28
+const HIGHEST_NOTE = 103
+
 export const colors = {
   GREEN: '#bada55',
   RED: '#FF0000',
@@ -41,3 +44,6 @@ export const msToPx = (ms) => {
   return ms / MS_TO_PX_RATIO
 }
 
+export const keyNotOnPiano = (noteNumber) => {
+  return noteNumber < LOWEST_NOTE || noteNumber > HIGHEST_NOTE
+}

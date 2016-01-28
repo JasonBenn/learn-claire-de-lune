@@ -1,14 +1,11 @@
 import _, { each, range } from 'lodash'
-import { midiKeyCodeToNoteCode, ticksToPx, colors } from './utils'
+import { keyNotOnPiano, midiKeyCodeToNoteCode, ticksToPx, colors } from './utils'
 
 const STAFF_TOP = 100.5
 const LEFT_BOUND = 0
 const RIGHT_BOUND = 80000
 const GAP_BETWEEN_LINES = 20
 const NOTE_RADIUS = 10;
-
-const LOWEST_NOTE = 28
-const HIGHEST_NOTE = 103
 
 class Draw {
   constructor(canvas) {
@@ -86,7 +83,7 @@ export default class DrawMusic extends Draw {
       let { deltaTime, subtype, noteNumber, color = colors.BLACK } = midiNote
       px += ticksToPx(deltaTime)
       if (subtype === 'noteOn') {
-        if (noteNumber < LOWEST_NOTE || noteNumber > HIGHEST_NOTE) color = colors.GRAY
+        if (keyNotOnPiano(noteNumber)) color = colors.GRAY
         this.note(noteNumber, color, px - offset)
       }
     })
