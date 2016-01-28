@@ -1,14 +1,14 @@
 import _, { each, range } from 'lodash'
-import { midiKeyCodeToNoteCode, ticksToPx } from './utils'
+import { midiKeyCodeToNoteCode, ticksToPx, colors } from './utils'
 
-const GREEN = '#bada55'
-const RED = '#FF0000'
-const BLACK = '#000'
 const STAFF_TOP = 100.5
 const LEFT_BOUND = 0
 const RIGHT_BOUND = 80000
 const GAP_BETWEEN_LINES = 20
 const NOTE_RADIUS = 10;
+
+const LOWEST_NOTE = 28
+const HIGHEST_NOTE = 103
 
 class Draw {
   constructor(canvas) {
@@ -75,23 +75,19 @@ export default class DrawMusic extends Draw {
     return [0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6][inOctave] + outOfOctave
   }
 
-  note({ noteNumber, playedCorrectly }, time) {
+  note(noteNumber, color, time) {
     const noteTop = STAFF_TOP - this.whiteKeysDistance(noteNumber) * GAP_BETWEEN_LINES / 2
-    let color
-
-    if (playedCorrectly === true) color = GREEN
-    if (playedCorrectly === false) color = RED
-    if (playedCorrectly === null) color = BLACK
     this.circle(time, noteTop, color)
   }
 
   notes(notesList, offset = 0) {
     var px = 0
     notesList.forEach((midiNote, i) => {
-      const { deltaTime, subtype, noteNumber } = midiNote
+      let { deltaTime, subtype, noteNumber, color = colors.BLACK } = midiNote
       px += ticksToPx(deltaTime)
       if (subtype === 'noteOn') {
-        this.note(midiNote, px - offset)
+        if (noteNumber < LOWEST_NOTE || noteNumber > HIGHEST_NOTE) color = colors.GRAY
+        this.note(noteNumber, color, px - offset)
       }
     })
   }

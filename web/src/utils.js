@@ -1,3 +1,10 @@
+export const colors = {
+  GREEN: '#bada55',
+  RED: '#FF0000',
+  BLACK: '#000',
+  GRAY: '#888'
+}
+
 const NOTE_OFFSETS = {
   c: 0,
   'c#': 1, db: 1,

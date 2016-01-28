@@ -5,7 +5,7 @@ import $ from 'jquery'
 import DrawMusic from './draw'
 import SongReader, { MidiNote } from './song-reader'
 import Piano from './piano'
-import { midiKeyCodeToNoteCode, friendlyChord, ticksToPx, msToPx } from './utils'
+import { midiKeyCodeToNoteCode, friendlyChord, ticksToPx, msToPx, colors } from './utils'
 
 const PEDAL_CODE = 176
 const TIMING_CLOCK = 248
@@ -96,14 +96,14 @@ class Trainer {
     if (correctNotePlayed) {
       if (velocity) {
         this.correctNotesCount += 1
-        correctNotePlayed.playedCorrectly = true
+        correctNotePlayed.color = colors.GREEN
       } else {
         this.correctNotesCount = Math.max(this.correctNotesCount - 1, 0)
-        correctNotePlayed.playedCorrectly = null
+        correctNotePlayed.color = colors.BLACK
       }
     } else {
       if (velocity) {
-        this.incorrectNotes[noteNumber] = new MidiNote({ noteNumber, playedCorrectly: false, deltaTime: 0, subtype: 'noteOn' })
+        this.incorrectNotes[noteNumber] = new MidiNote({ noteNumber, color: colors.RED, deltaTime: 0, subtype: 'noteOn' })
         this.incorrectNotesCount += 1
       } else {
         delete this.incorrectNotes[noteNumber]
