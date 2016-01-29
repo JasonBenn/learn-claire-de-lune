@@ -47,3 +47,15 @@ export const msToPx = (ms) => {
 export const keyNotOnPiano = (noteNumber) => {
   return noteNumber < LOWEST_NOTE || noteNumber > HIGHEST_NOTE
 }
+
+export const whiteKeysDistance = code => {
+  const fromBaseKey = code - 77
+  let inOctave = fromBaseKey % 12
+  if (inOctave < 0) inOctave += 12 // mimics negative indices for an array of size 12.
+  const outOfOctave = _.floor(fromBaseKey / 12) * 7
+  return [0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6][inOctave] + outOfOctave
+}
+
+export const notInDFlatMajor = noteNumber => {
+  return _.contains([2, 4, 7, 9, 11], noteNumber % 12)
+}

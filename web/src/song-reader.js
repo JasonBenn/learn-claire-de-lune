@@ -1,4 +1,4 @@
-import { midiKeyCodeToNoteCode } from './utils'
+import { midiKeyCodeToNoteCode, notInDFlatMajor } from './utils'
 
 export default class SongReader {
   constructor(midiData) {
@@ -79,7 +79,7 @@ class MidiTrack {
 
 export class MidiNote {
   constructor(note) {
-    this.playedCorrectly = null
     _.extend(this, note)
+    if (notInDFlatMajor(this.noteNumber)) this.accidental = true
   }
 }

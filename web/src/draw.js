@@ -1,17 +1,22 @@
 import _, { each, range } from 'lodash'
-import { keyNotOnPiano, midiKeyCodeToNoteCode, ticksToPx, colors } from './utils'
+import { whiteKeysDistance, keyNotOnPiano, midiKeyCodeToNoteCode, ticksToPx, colors } from './utils'
 
 const STAFF_TOP = 100.5
 const LEFT_BOUND = 0
 const RIGHT_BOUND = 80000
 const GAP_BETWEEN_LINES = 20
 const NOTE_RADIUS = 10;
+const ACCIDENTAL_X_OFFSET = NOTE_RADIUS * 1.8
+const ACCIDENTAL_FONT_SIZE = NOTE_RADIUS * 2.3
 
 class Draw {
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
     this.canvasWidth = canvas.width;
     this.canvasHeight = canvas.height;
+    this.ctx.font = ACCIDENTAL_FONT_SIZE + 'px serif'
+    this.ctx.textBaseline = 'middle'
+    this.ctx.textAlign = 'center'
   }
 
   circle(x, y, color) {
@@ -29,6 +34,10 @@ class Draw {
     this.ctx.lineWidth = lineWidth;
     this.ctx.stroke();
     this.ctx.closePath();
+  }
+
+  drawText(x, y, text) {
+    this.ctx.fillText(text, x, y)
   }
 
   clearAndPan(panX, panY) {
@@ -64,27 +73,24 @@ export default class DrawMusic extends Draw {
     this.line(x, 0, x, this.canvasHeight)
   }
 
-  whiteKeysDistance(code) {
-    const fromBaseKey = code - 77
-    let inOctave = fromBaseKey % 12
-    if (inOctave < 0) inOctave += 12 // mimics negative indices for an array of size 12.
-    const outOfOctave = _.floor(fromBaseKey / 12) * 7
-    return [0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6][inOctave] + outOfOctave
+  drawNatural(x, y) {
+    this.drawText(x, y, '♮')
   }
 
-  note(noteNumber, color, time) {
-    const noteTop = STAFF_TOP - this.whiteKeysDistance(noteNumber) * GAP_BETWEEN_LINES / 2
+  note(noteNumber, color, time, accidental) {
+    const noteTop = STAFF_TOP - whiteKeysDistance(noteNumber) * GAP_BETWEEN_LINES / 2
+    if (accidental) this.drawNatural(time + ACCIDENTAL_X_OFFSET, noteTop)
     this.circle(time, noteTop, color)
   }
 
   notes(notesList, offset = 0) {
     var px = 0
     notesList.forEach((midiNote, i) => {
-      let { deltaTime, subtype, noteNumber, color = colors.BLACK } = midiNote
+      let { deltaTime, subtype, noteNumber, accidental, color = colors.BLACK } = midiNote
       px += ticksToPx(deltaTime)
       if (subtype === 'noteOn') {
         if (keyNotOnPiano(noteNumber)) color = colors.GRAY
-        this.note(noteNumber, color, px - offset)
+        this.note(noteNumber, color, px - offset, accidental)
       }
     })
   }
