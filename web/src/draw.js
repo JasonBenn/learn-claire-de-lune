@@ -36,7 +36,8 @@ class Draw {
     this.ctx.closePath();
   }
 
-  drawText(x, y, text) {
+  drawText(x, y, text, color) {
+    this.ctx.fillStyle = color
     this.ctx.fillText(text, x, y)
   }
 
@@ -73,13 +74,13 @@ export default class DrawMusic extends Draw {
     this.line(x, 0, x, this.canvasHeight)
   }
 
-  drawNatural(x, y) {
-    this.drawText(x, y, '♮')
+  drawNatural(x, y, color) {
+    this.drawText(x, y, '♮', color)
   }
 
   note(noteNumber, color, time, accidental) {
     const noteTop = STAFF_TOP - whiteKeysDistance(noteNumber) * GAP_BETWEEN_LINES / 2
-    if (accidental) this.drawNatural(time + ACCIDENTAL_X_OFFSET, noteTop)
+    if (accidental) this.drawNatural(time + ACCIDENTAL_X_OFFSET, noteTop, color)
     this.circle(time, noteTop, color)
   }
 
