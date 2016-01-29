@@ -51,7 +51,7 @@ class Trainer {
     this.draw.notes(this.songReader.leftHand)
     this.draw.notes(this.songReader.rightHand)
     this.draw.divider(panX)
-    this.draw.notes(_.values(this.incorrectNotes), panX)
+    this.draw.notes(_.values(this.incorrectNotes), panX - PAN_STARTING_OFFSET_PX)
   }
 
   currentPanX() {
