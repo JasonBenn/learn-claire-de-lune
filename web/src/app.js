@@ -99,7 +99,7 @@ class Trainer {
     const [eventType, noteNumber, velocity] = msg.data
     if (eventType === PEDAL_CODE || eventType === TIMING_CLOCK) return
     const correctNotePlayed = _.find(this.currentChord, note => note.noteNumber === noteNumber)
-    const currentChordLength = _.reject(this.currentChord, note => keyNotOnPiano(note.noteNumber)).length
+    const currentChordLength = _.uniqBy(_.reject(this.currentChord, note => keyNotOnPiano(note.noteNumber)), note => note.noteNumber).length
 
     if (correctNotePlayed) {
       if (velocity) {
