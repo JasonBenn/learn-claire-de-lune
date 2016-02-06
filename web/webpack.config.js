@@ -5,8 +5,8 @@ module.exports = {
   module: {
     loaders: [
       {
-        loader: 'babel-loader',
         test: /\.js$/,
+        loader: 'babel',
         include: [
           path.resolve(__dirname, "src")
         ],
@@ -18,16 +18,16 @@ module.exports = {
         }
       }, {
         test: /\.scss/,
-        loader: 'style-loader!css-loader!autoprefixer-loader?browsers=last 2 versions!sass-loader'
+        loader: 'style-loader!css-loader!postcss-loader?browsers=last 2 versions!sass-loader'
       }, {
         test: /\.css$/,
-        loader: 'style-loader!css-loader!autoprefixer-loader?browsers=last 2 versions'
+        loader: 'style-loader!css-loader!postcss-loader?browsers=last 2 versions'
       }
     ]
   },
 
   entry: {
-    app: ['webpack/hot/dev-server', './src/app.js']
+    app: ["babel-polyfill", './src/app.js']
   },
 
   output: {
