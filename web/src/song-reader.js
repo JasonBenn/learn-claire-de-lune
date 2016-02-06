@@ -1,80 +1,45 @@
-import { midiKeyCodeToNoteCode, notInDFlatMajor } from './utils'
+import { midiKeyCodeToNoteCode, notInDFlatMajor, uniqByNoteNumber, mergeMoments, zipBy } from './utils'
 
 export default class SongReader {
   constructor(midiData) {
-    this.rightHand = new MidiTrack(midiData.tracks[1])
-    this.leftHand = new MidiTrack(midiData.tracks[2])
-
-    this.updateLeftChord()
-    this.updateRightChord()
+    this.rightHand = new MomentsIterator(midiData.tracks[1])
+    this.leftHand = new MomentsIterator(midiData.tracks[2])
   }
 
-  updateLeftChord() {
-    this.currentLeftChord = this.leftHand.getNextChord(this.leftHand.cursor)
-  }
-
-  updateRightChord() {
-    this.currentRightChord = this.rightHand.getNextChord(this.rightHand.cursor)
-  }
-
-  getNextChord() {
-    let currentChord
-    if (this.leftHand.totalTicks === this.rightHand.totalTicks) {
-      currentChord = this.currentLeftChord.concat(this.currentRightChord)
-      this.currentChordTicks = this.leftHand.totalTicks
-      this.updateLeftChord()
-      this.updateRightChord()
-    } else if (this.leftHand.totalTicks < this.rightHand.totalTicks) {
-      currentChord = this.currentLeftChord
-      this.currentChordTicks = this.leftHand.totalTicks
-      this.updateLeftChord()
-    } else {
-      currentChord = this.currentRightChord
-      this.currentChordTicks = this.rightHand.totalTicks
-      this.updateRightChord()
-    }
-    return currentChord
+  *[Symbol.iterator]() {
+    yield * zipBy([this.leftHand, this.rightHand], ({totalTicks}) => totalTicks, mergeMoments)
   }
 }
 
-class MidiTrack {
-  constructor(track) {
-    this.track = track.map(note => new MidiNote(note))
-    this.cursor = 0
-    this.totalTicks = 0
-    this.advanceToNextNoteOn()
+function * MomentsIterator(midiTrack) {
+  const notes = midiTrack.map(note => new MidiNote(note))
+
+  const advanceCursor = () => {
+    if (!currentNote) return
+    totalTicks += currentNote.deltaTime
+    cursor += 1
+    currentNote = notes[cursor]
   }
 
-  advanceToNextNoteOn() {
-    while (this.currentNote().subtype !== 'noteOn') this.advanceCursor()
+  const addNoteToChord = (chord, note) => {
+    if (note && note.subtype === 'noteOn') chord.push(note)
+    advanceCursor()
   }
 
-  currentNote() {
-    return this.track[this.cursor]
+  let cursor = 0
+  let totalTicks = 0
+  let currentNote = notes[cursor]
+  while (currentNote && currentNote.subtype !== 'noteOn') advanceCursor()
+
+  const nextMoment = () => {
+    const chord = []
+    while (currentNote && currentNote.subtype !== 'noteOn') advanceCursor()
+    addNoteToChord(chord, currentNote)
+    while (currentNote && currentNote.deltaTime === 0) addNoteToChord(chord, currentNote)
+    return { totalTicks, chord: uniqByNoteNumber(chord) }
   }
 
-  advanceCursor() {
-    this.totalTicks += this.currentNote().deltaTime
-    this.cursor += 1
-  }
-
-  getNextChord() {
-    this.advanceToNextNoteOn()
-
-    let currentChord = [this.currentNote()]
-    this.advanceCursor()
-
-    while (!this.currentNote().deltaTime) {
-      if (this.currentNote().subtype === 'noteOn') currentChord.push(this.currentNote())
-      this.advanceCursor()
-    }
-
-    return currentChord
-  }
-
-  forEach(fun) {
-    return this.track.forEach(fun)
-  }
+  while (currentNote) yield nextMoment()
 }
 
 export class MidiNote {

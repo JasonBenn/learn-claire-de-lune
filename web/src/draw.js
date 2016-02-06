@@ -84,6 +84,15 @@ export default class DrawMusic extends Draw {
     this.circle(time, noteTop, color)
   }
 
+  moments(moments) {
+    moments.forEach(({totalTicks, chord}) => {
+      chord.forEach(({noteNumber, accidental, color = colors.BLACK}) => {
+        if (keyNotOnPiano(noteNumber)) color = colors.GRAY
+        this.note(noteNumber, color, ticksToPx(totalTicks), accidental)
+      })
+    })
+  }
+
   notes(notesList, offset = 0) {
     var px = 0
     notesList.forEach((midiNote, i) => {

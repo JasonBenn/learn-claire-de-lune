@@ -1,3 +1,5 @@
+import _, { uniqBy } from 'lodash'
+
 const LOWEST_NOTE = 28
 const HIGHEST_NOTE = 103
 
@@ -21,6 +23,43 @@ const NOTE_OFFSETS = {
   a: 9,
   'a#': 10, bb: 10,
   b: 11
+}
+
+export function * zipBy([iterableA, iterableB], getComparable, onTie) {
+  let nextA = iterableA.next()
+  let nextB = iterableB.next()
+
+  while (!nextA.done || !nextB.done) {
+    if (nextA.done) {
+      yield nextB.value
+      nextB = iterableB.next()
+      continue
+    }
+
+    if (nextB.done) {
+      yield nextA.value
+      nextA = iterableA.next()
+      continue
+    }
+
+    if (getComparable(nextA.value) < getComparable(nextB.value)) {
+      yield nextA.value
+      nextA = iterableA.next()
+      continue
+    }
+
+    if (getComparable(nextA.value) > getComparable(nextB.value)) {
+      yield nextB.value
+      nextB = iterableB.next()
+      continue
+    }
+
+    if (getComparable(nextA.value) === getComparable(nextB.value)) {
+      yield onTie(nextA.value, nextB.value)
+      nextA = iterableA.next()
+      nextB = iterableB.next()
+    }
+  }
 }
 
 export const midiKeyCodeToNoteCode = midiKeyCode => {
@@ -57,5 +96,13 @@ export const whiteKeysDistance = code => {
 }
 
 export const notInDFlatMajor = noteNumber => {
-  return _.contains([2, 4, 7, 9, 11], noteNumber % 12)
+  return _.includes([2, 4, 7, 9, 11], noteNumber % 12)
+}
+
+export const uniqByNoteNumber = chord => {
+  return _.uniqBy(chord, note => note.noteNumber)
+}
+
+export const mergeMoments = (leftMoment, rightMoment) => {
+  return { totalTicks: leftMoment.totalTicks, chord: leftMoment.chord.concat(rightMoment.chord) }
 }
