@@ -23,7 +23,16 @@ class Trainer {
     this.incorrectNotesCount = 0
     this.correctNotesCount = 0
 
+    this.index = -1
+
     this.historicalPanX = PAN_STARTING_OFFSET_PX
+  }
+
+  resetToLastNote() {
+    this.moments[this.index].chord.forEach(note => note.color = colors.BLACK)
+    this.index = Math.max(this.index - 1, 0)
+    this.moments[this.index].chord.forEach(note => note.color = colors.BLACK)
+    this.historicalPanX = PAN_STARTING_OFFSET_PX - ticksToPx(this.currentChordTicks())
   }
 
   connectToPiano() {
@@ -35,11 +44,12 @@ class Trainer {
   }
 
   updateChord() {
-    this.currentChord = this.songReader.getNextChord()
+    this.index += 1
   }
 
   start(data) {
     this.songReader = new SongReader(data)
+    this.moments = Array.from(this.songReader)
     this.updateChord()
     this.unpause()
     this.render(Date.now())
@@ -48,8 +58,7 @@ class Trainer {
   renderTranslated(panX, panY = 0) {
     this.draw.clearAndPan(panX, panY)
     this.draw.staff()
-    this.draw.notes(this.songReader.leftHand)
-    this.draw.notes(this.songReader.rightHand)
+    this.draw.moments(this.moments)
     this.draw.divider(panX)
     this.draw.notes(_.values(this.incorrectNotes), panX - PAN_STARTING_OFFSET_PX)
   }
@@ -64,12 +73,10 @@ class Trainer {
     if (this.currentChordOutOfRange()) {
       this.updateChord()
     }
-
-    console.log('Current chord:', friendlyChord(this.currentChord))
   }
 
   currentChordOutOfRange() {
-    return _.all(this.currentChord.map(note => keyNotOnPiano(note.noteNumber)))
+    return _.every(this.currentChord().map(note => keyNotOnPiano(note.noteNumber)))
   }
 
   unpause() {
@@ -78,7 +85,11 @@ class Trainer {
   }
 
   currentChordTicks() {
-    return this.songReader.currentChordTicks
+    return this.moments[this.index].totalTicks
+  }
+
+  currentChord() {
+    return this.moments[this.index].chord
   }
 
   nextChordPx() {
@@ -98,8 +109,8 @@ class Trainer {
   onMidiMessage(msg, correctCb, incorrectCb) {
     const [eventType, noteNumber, velocity] = msg.data
     if (eventType === PEDAL_CODE || eventType === TIMING_CLOCK) return
-    const correctNotePlayed = _.find(this.currentChord, note => note.noteNumber === noteNumber)
-    const currentChordLength = _.uniqBy(_.reject(this.currentChord, note => keyNotOnPiano(note.noteNumber)), note => note.noteNumber).length
+    const correctNotePlayed = _.find(this.currentChord(), note => note.noteNumber === noteNumber)
+    const currentChordLength = _.reject(this.currentChord(), note => keyNotOnPiano(note.noteNumber)).length
 
     if (correctNotePlayed) {
       if (velocity) {
@@ -122,7 +133,14 @@ class Trainer {
     if (this.correctNotesCount === currentChordLength && !this.incorrectNotesCount) {
       this.correctNotesCount = 0
       this.incorrectNotesCount = 0
-      this.updateChord()
+      if (this.tryAgain) {
+        this.tryAgain = false
+        this.resetToLastNote()
+      } else {
+        this.updateChord()
+      }
+    } else if (this.incorrectNotesCount) {
+      this.tryAgain = true
     }
   }
 }
