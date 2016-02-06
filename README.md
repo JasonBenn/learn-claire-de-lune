@@ -1,37 +1,14 @@
 For practice reading music off a page, without looking at the keyboard.
 
-
-Midi note subtypes:
-
-type meta:
-  trackName - "Piano right", "Piano left"
-  copyrightNotice
-  text
-  timeSignature
-  keySignature
-  setTempo
-  marker - ignore for now, eventually display up top
-  endOfTrack
-
-type channel:
-  controller
-
-programChange
-noteOn
-noteOff - eventually use a hash of stacks. first note goes on, when corresponding noteOff comes, figure out the duration and place it where the first note is.
-
-snippet for getting info on note types:
-console.table(_.uniq(_.flatten(data.tracks.map(track => track.filter(item => item.subtype === 'trackName')))))
-
-TRACK NAME PIANO LEFT AND PIANO RIGHT!!
-
-
-first track is all meta.
-it has timeSignature, keySignature, and tons of setTempos.
-setTempo has microsecondsPerBeat (div by 1000 to get milliseconds) and deltaTime.
-
-track 1 - first event is trackName
-
-
-How to translate deltaTime into absolute? Actually, don't. Keep a running state var of current place.
-Just make it px, see how it feels.
+Features for launch:
+- read from a midi file!
+- notes scroll across page
+- pause until you get the chord right
+- show incorrect notes
+- render accidentals
+- skip unplayable notes
+- rewind one note when you mess up
+--ABOVE THIS LINE IS DONE--
+- Only rewind one note at most
+- a timer to get to the end!
+- a scoreboard
