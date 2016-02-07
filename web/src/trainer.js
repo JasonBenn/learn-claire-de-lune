@@ -28,6 +28,14 @@ export default class Trainer {
     this.render(Date.now())
   }
 
+  activatePeekMode() {
+    this.peekMode = true
+  }
+
+  deactivatedPeekMode() {
+    this.peekMode = false
+  }
+
   setChordColor(color, index) {
     this.moments[index].chord.forEach(note => note.color = color)
   }
@@ -37,6 +45,7 @@ export default class Trainer {
   }
 
   setToTick(tick) {
+    this.resetColors()
     this.index = this.moments.findIndex(moment => moment.totalTicks === tick)
     this.panToTick(tick)
   }
@@ -60,7 +69,7 @@ export default class Trainer {
   renderTranslated(panX, panY = 0) {
     this.draw.clearAndPan(panX, panY)
     this.draw.staff()
-    this.draw.moments(this.moments)
+    this.peekMode ? this.draw.peekedMoments(this.moments) : this.draw.moments(this.moments)
     this.draw.divider(panX)
     this.draw.notes(_.values(this.incorrectNotes), panX - PAN_STARTING_OFFSET_PX)
   }

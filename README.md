@@ -10,6 +10,7 @@ Features for launch:
 - rewind one note when you mess up
 - Only rewind one note at most
 - Bookmarks!!
+- peek mode
 --ABOVE THIS LINE IS DONE--
 - a timer to get to the end!
 - a scoreboard

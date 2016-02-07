@@ -1,5 +1,5 @@
 import _, { each, range } from 'lodash'
-import { whiteKeysDistance, keyNotOnPiano, midiKeyCodeToNoteCode, ticksToPx, colors } from './utils'
+import { whiteKeysDistance, keyNotOnPiano, midiKeyCodeToNoteCode, ticksToPx, colors, shadeColor } from './utils'
 
 const STAFF_TOP = 100.5
 const LEFT_BOUND = 0
@@ -19,11 +19,20 @@ class Draw {
     this.ctx.textAlign = 'center'
   }
 
-  circle(x, y, color) {
+  prepareCircle(x, y, color) {
     this.ctx.beginPath();
     this.ctx.arc(x, y, NOTE_RADIUS, 0, 2 * Math.PI, false);
     this.ctx.fillStyle = color;
+  }
+
+  circle(x, y, color) {
+    this.prepareCircle(x, y, color)
     this.ctx.fill()
+  }
+
+  emptyCircle(x, y, color) {
+    this.prepareCircle(x, y, shadeColor(color, 10))
+    this.ctx.stroke()
   }
 
   line(x1, y1, x2, y2, color = '#000', lineWidth = 1) {
@@ -84,11 +93,27 @@ export default class DrawMusic extends Draw {
     this.circle(time, noteTop, color)
   }
 
+  peekedNote(noteNumber, color, time, accidental) {
+    const noteTop = STAFF_TOP - whiteKeysDistance(noteNumber) * GAP_BETWEEN_LINES / 2
+    if (accidental) this.drawNatural(time + ACCIDENTAL_X_OFFSET, noteTop, color)
+    this.emptyCircle(time, noteTop, color)
+    this.drawText(time, noteTop, midiKeyCodeToNoteCode(noteNumber), color)
+  }
+
   moments(moments) {
     moments.forEach(({totalTicks, chord}) => {
       chord.forEach(({noteNumber, accidental, color = colors.BLACK}) => {
         if (keyNotOnPiano(noteNumber)) color = colors.GRAY
         this.note(noteNumber, color, ticksToPx(totalTicks), accidental)
+      })
+    })
+  }
+
+  peekedMoments(moments) {
+    moments.forEach(({totalTicks, chord}) => {
+      chord.forEach(({noteNumber, accidental, color = colors.BLACK}) => {
+        if (keyNotOnPiano(noteNumber)) color = colors.GRAY
+        this.peekedNote(noteNumber, color, ticksToPx(totalTicks), accidental)
       })
     })
   }

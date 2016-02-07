@@ -6,8 +6,8 @@ const HIGHEST_NOTE = 103
 export const colors = {
   GREEN: '#bada55',
   RED: '#FF0000',
-  BLACK: '#000',
-  GRAY: '#888'
+  BLACK: '#000000',
+  GRAY: '#888888'
 }
 
 const NOTE_OFFSETS = {
@@ -23,6 +23,10 @@ const NOTE_OFFSETS = {
   a: 9,
   'a#': 10, bb: 10,
   b: 11
+}
+
+export const ifSpaceBar = function(callback, e) {
+  if (e.which === 32) callback()
 }
 
 export function * zipBy([iterableA, iterableB], getComparable, onTie) {
@@ -66,6 +70,16 @@ export const midiKeyCodeToNoteCode = midiKeyCode => {
   const note = _.invert(NOTE_OFFSETS)[midiKeyCode % 12]
   const octave = Math.floor(midiKeyCode / 12) - 1
   return note + octave
+}
+
+export const shadeColor = (color, percent) => {
+  var f = parseInt(color.slice(1),16)
+  const t = percent < 0 ? 0 : 255
+  const p = percent < 0 ? percent * -1 : percent
+  const R = f >> 16
+  const G = f >> 8&0x00FF
+  const B = f & 0x0000FF;
+  return "#" + (0x1000000+(Math.round((t-R)*p)+R) * 0x10000 + (Math.round((t-G)*p)+G) * 0x100 + (Math.round((t-B)*p)+B)).toString(16).slice(1)
 }
 
 export const friendlyChord = chord => {

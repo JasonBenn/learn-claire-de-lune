@@ -6,7 +6,7 @@ import Piano from './piano'
 import SongReader from './song-reader'
 import DrawMusic from './draw'
 import { each, partial } from 'lodash'
-import { ticksToPx } from './utils'
+import { ticksToPx, ifSpaceBar } from './utils'
 
 const bookmarks = [19680, 26640, 30600, 34920]
 
@@ -33,8 +33,9 @@ async function main() {
   each(bookmarks, partial(renderBookmark, moments))
   $('.bookmarks').on('click', 'canvas', function(e) {
     trainer.setToTick($(this).data('bookmark'))
-    trainer.resetColors()
   })
+  $(document).keydown(partial(ifSpaceBar, ::trainer.activatePeekMode))
+  $(document).keyup(partial(ifSpaceBar, ::trainer.deactivatedPeekMode))
 }
 
 main()
