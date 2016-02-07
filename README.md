@@ -9,7 +9,7 @@ Features for launch:
 - skip unplayable notes
 - rewind one note when you mess up
 - Only rewind one note at most
---ABOVE THIS LINE IS DONE--
 - Bookmarks!!
+--ABOVE THIS LINE IS DONE--
 - a timer to get to the end!
 - a scoreboard

@@ -8,7 +8,7 @@ import DrawMusic from './draw'
 import { each, partial } from 'lodash'
 import { ticksToPx } from './utils'
 
-const bookmarks = [19680, 26640, 31200, 34920]
+const bookmarks = [19680, 26640, 30600, 34920]
 
 const renderBookmark = (moments, bookmark, i) => {
   const canvas = $(`<canvas data-bookmark='${bookmark}' width='1000px' height='400px' class="bookmark ${i}" />`)[0]
@@ -17,6 +17,10 @@ const renderBookmark = (moments, bookmark, i) => {
   draw.clearAndPan(-ticksToPx(bookmark) + 500)
   draw.staff()
   draw.moments(moments)
+}
+
+const logMoments = (moments, chordLength) => {
+  console.log(moments.filter(moment => moment.chord.length > chordLength).map(moment => moment.totalTicks))
 }
 
 async function main() {
