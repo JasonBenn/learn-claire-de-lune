@@ -41,7 +41,7 @@ class Draw {
     this.ctx.fillText(text, x, y)
   }
 
-  clearAndPan(panX, panY) {
+  clearAndPan(panX = 0, panY = 0) {
     this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.clear()
     this.ctx.translate(panX, panY)
