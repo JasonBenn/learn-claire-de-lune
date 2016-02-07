@@ -8,7 +8,8 @@ Features for launch:
 - render accidentals
 - skip unplayable notes
 - rewind one note when you mess up
---ABOVE THIS LINE IS DONE--
 - Only rewind one note at most
+--ABOVE THIS LINE IS DONE--
+- Bookmarks!!
 - a timer to get to the end!
 - a scoreboard

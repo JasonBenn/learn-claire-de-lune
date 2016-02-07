@@ -134,13 +134,15 @@ class Trainer {
       this.correctNotesCount = 0
       this.incorrectNotesCount = 0
       if (this.tryAgain) {
-        this.tryAgain = false
         this.resetToLastNote()
+        this.tryAgain = false
       } else {
         this.updateChord()
+        this.alreadyTryingAgain = false
       }
-    } else if (this.incorrectNotesCount) {
+    } else if (this.incorrectNotesCount && !this.alreadyTryingAgain) {
       this.tryAgain = true
+      this.alreadyTryingAgain = true
     }
   }
 }
