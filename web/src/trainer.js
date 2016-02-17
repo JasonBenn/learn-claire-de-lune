@@ -3,7 +3,8 @@ import DrawMusic from './draw'
 import { MidiNote } from './song-reader'
 import { keyNotOnPiano, midiKeyCodeToNoteCode, friendlyChord, ticksToPx, msToPx, colors } from './utils'
 
-const PEDAL_CODE = 176
+const PEDAL_CODE_A = 176
+const PEDAL_CODE_B = 177
 const TIMING_CLOCK = 248
 const PAN_STARTING_OFFSET_PX = 500
 
@@ -119,7 +120,7 @@ export default class Trainer {
 
   onMidiMessage(msg, correctCb, incorrectCb) {
     const [eventType, noteNumber, velocity] = msg.data
-    if (eventType === PEDAL_CODE || eventType === TIMING_CLOCK) return
+    if (eventType === PEDAL_CODE_A || eventType === PEDAL_CODE_B || eventType === TIMING_CLOCK) return
     const correctNotePlayed = _.find(this.currentChord(), note => note.noteNumber === noteNumber)
     const currentChordLength = _.reject(this.currentChord(), note => keyNotOnPiano(note.noteNumber)).length
 
