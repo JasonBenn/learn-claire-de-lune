@@ -2,7 +2,7 @@ import { floor, range, partial, each, filter, find, pluck, uniq } from 'lodash'
 import $ from 'jquery'
 import DrawMusic from './draw'
 import { MidiNote } from './song-reader'
-import { keyNotOnPiano, midiKeyCodeToNoteCode, friendlyChord, ticksToPx, msToPx, colors } from './utils'
+import { keyNotOnPiano, midiKeyCodeToNoteCode, friendlyChord, ticksToPx, msToPx, colors, greenNotesInMoment, toPercent } from './utils'
 
 const PEDAL_CODE_A = 176
 const PEDAL_CODE_B = 177
@@ -63,6 +63,7 @@ export default class Trainer {
     this.index = Math.max(this.index - 1, 0)
     this.setChordColor(colors.BLACK, this.index)
     this.panToTick(this.currentChordTicks())
+    this.updateProgress()
   }
 
   updateChord() {
@@ -71,7 +72,9 @@ export default class Trainer {
   }
 
   updateProgress() {
-    $('.progress .value').text((this.index / this.moments.length * 100).toFixed(1) + '%')
+    const greenNotes = this.moments.reduce((sum, moment) => sum + greenNotesInMoment(moment.chord), 0)
+    const totalNotes = this.moments.reduce((sum, moment) => moment.chord.length + sum, 0)
+    $('.progress .value').text(toPercent(greenNotes / totalNotes))
   }
 
   renderTranslated(panX, panY = 0) {

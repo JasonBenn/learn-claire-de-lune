@@ -29,6 +29,8 @@ export const ifSpaceBar = function(callback, e) {
   if (e.which === 32) callback()
 }
 
+export const greenNotesInMoment = chord => _.reduce(chord, (sum, note) => (note.color === colors.GREEN) ? sum + 1 : sum, 0)
+
 export function * zipBy([iterableA, iterableB], getComparable, onTie) {
   let nextA = iterableA.next()
   let nextB = iterableB.next()
@@ -120,3 +122,5 @@ export const uniqByNoteNumber = chord => {
 export const mergeMoments = (leftMoment, rightMoment) => {
   return { totalTicks: leftMoment.totalTicks, chord: leftMoment.chord.concat(rightMoment.chord) }
 }
+
+export const toPercent = n => (n * 100).toFixed(1) + '%'
