@@ -41,12 +41,13 @@ export default class Trainer {
     this.moments[index].chord.forEach(note => note.color = color)
   }
 
-  resetColors() {
-    range(0, this.moments.length).forEach(partial(::this.setChordColor, colors.BLACK))
+  resetColors(fromTick = 0) {
+    const fromIndex = this.moments.findIndex(moment => moment.totalTicks === fromTick)
+    range(fromIndex, this.moments.length).forEach(partial(::this.setChordColor, colors.BLACK))
   }
 
   setToTick(tick) {
-    this.resetColors()
+    this.resetColors(tick)
     this.index = this.moments.findIndex(moment => moment.totalTicks === tick)
     this.panToTick(tick)
   }

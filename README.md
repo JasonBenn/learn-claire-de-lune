@@ -11,6 +11,8 @@ Features for launch:
 - Only rewind one note at most
 - Bookmarks!!
 - peek mode
+- Going to a tick only erases played notes AFTER that tick, not all notes
 - -ABOVE THIS LINE IS DONE-
+- Modulating the pitch doesn't play a note
 - a timer to get to the end!
 - a scoreboard
