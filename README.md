@@ -12,7 +12,14 @@ Features for launch:
 - Bookmarks!!
 - peek mode
 - Going to a tick only erases played notes AFTER that tick, not all notes
+- scoreboard: progress %
 - -ABOVE THIS LINE IS DONE-
-- Modulating the pitch doesn't play a note
-- a timer to get to the end!
-- a scoreboard
+- Click and drag a section to loop over that section
+- timing window - you can only hit the note after the first dotted line. last dotted line is pause point
+- modulate bpm (show on scoreboard)
+- scoreboard: accuracy %
+- scoreboard timing %
+- persist scores to backend
+- wrap the clefs - make it look like a sheet of music!
+- determine note lengths and render
+- redesign bookmarks. how will that feature fit in?

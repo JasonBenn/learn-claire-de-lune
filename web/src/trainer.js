@@ -1,4 +1,5 @@
 import { floor, range, partial, each, filter, find, pluck, uniq } from 'lodash'
+import $ from 'jquery'
 import DrawMusic from './draw'
 import { MidiNote } from './song-reader'
 import { keyNotOnPiano, midiKeyCodeToNoteCode, friendlyChord, ticksToPx, msToPx, colors } from './utils'
@@ -66,6 +67,11 @@ export default class Trainer {
 
   updateChord() {
     this.index += 1
+    this.updateProgress()
+  }
+
+  updateProgress() {
+    $('.progress .value').text((this.index / this.moments.length * 100).toFixed(1) + '%')
   }
 
   renderTranslated(panX, panY = 0) {
