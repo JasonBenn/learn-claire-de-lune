@@ -8,6 +8,7 @@ const PEDAL_CODE_A = 176
 const PEDAL_CODE_B = 177
 const TIMING_CLOCK = 248
 const PAN_STARTING_OFFSET_PX = 500
+const HARD_MODE = false
 
 export default class Trainer {
   constructor(canvas, moments) {
@@ -154,17 +155,23 @@ export default class Trainer {
 
     if (this.correctNotesCount === currentChordLength && !this.incorrectNotesCount) {
       this.correctNotesCount = 0
-      this.incorrectNotesCount = 0
-      if (this.tryAgain) {
-        this.resetToLastNote()
-        this.tryAgain = false
-      } else {
-        this.updateChord()
-        this.alreadyTryingAgain = false
-      }
+      this.incorrectNotesCount = 0;
+
+      (HARD_MODE ? ::this.maybeTryLastNoteAgain : ::this.updateChord)()
+
     } else if (this.incorrectNotesCount && !this.alreadyTryingAgain) {
       this.tryAgain = true
       this.alreadyTryingAgain = true
+    }
+  }
+
+  maybeTryLastNoteAgain() {
+    if (this.tryAgain) {
+      this.resetToLastNote()
+      this.tryAgain = false
+    } else {
+      this.updateChord()
+      this.alreadyTryingAgain = false
     }
   }
 }
