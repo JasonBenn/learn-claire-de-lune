@@ -26,7 +26,10 @@ const NOTE_OFFSETS = {
 }
 
 export const ifSpaceBar = function(callback, e) {
-  if (e.which === 32) callback()
+  if (e.which === 32) {
+    callback()
+    e.preventDefault()
+  }
 }
 
 export const greenNotesInMoment = chord => _.reduce(chord, (sum, note) => (note.color === colors.GREEN) ? sum + 1 : sum, 0)
