@@ -25,12 +25,15 @@ const NOTE_OFFSETS = {
   b: 11
 }
 
-export const ifSpaceBar = function(callback, e) {
-  if (e.which === 32) {
+const ifKey = keyCode => function(callback, e) {
+  if (e.which === keyCode) {
     callback()
     e.preventDefault()
   }
 }
+
+export const ifSpaceBar = ifKey(32)
+export const ifEnter = ifKey(13)
 
 export const greenNotesInMoment = chord => _.reduce(chord, (sum, note) => (note.color === colors.GREEN) ? sum + 1 : sum, 0)
 

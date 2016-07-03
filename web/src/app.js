@@ -6,7 +6,7 @@ import Piano from './piano'
 import SongReader from './song-reader'
 import DrawMusic from './draw'
 import { each, partial } from 'lodash'
-import { ticksToPx, ifSpaceBar } from './utils'
+import { ticksToPx, ifSpaceBar, ifEnter } from './utils'
 
 const bookmarks = [19680, 26640, 30600, 34920]
 
@@ -36,6 +36,7 @@ async function main() {
   })
   $(document).keydown(partial(ifSpaceBar, ::trainer.activatePeekMode))
   $(document).keyup(partial(ifSpaceBar, ::trainer.deactivatedPeekMode))
+  $(document).keydown(partial(ifEnter, ::trainer.updateChord))
 }
 
 main()
