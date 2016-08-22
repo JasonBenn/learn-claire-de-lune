@@ -74,10 +74,22 @@ export function * zipBy([iterableA, iterableB], getComparable, onTie) {
   }
 }
 
+export const midiKeyCodeToOctavelessNote = midiKeyCode => {
+  return _.invert(NOTE_OFFSETS)[midiKeyCode % 12]
+}
+
 export const midiKeyCodeToNoteCode = midiKeyCode => {
-  const note = _.invert(NOTE_OFFSETS)[midiKeyCode % 12]
+  const note = midiKeyCodeToOctavelessNote(midiKeyCode)
   const octave = Math.floor(midiKeyCode / 12) - 1
   return note + octave
+}
+
+export const getIsWhiteKey = midiNote => {
+  if (midiNote.accidental) {
+    return _.includes(['a', 'b', 'd', 'e', 'g'], midiNote.octavelessNote)
+  } else {
+    return midiNote.octavelessNote === "f" || midiNote.octavelessNote === "c"
+  }
 }
 
 export const shadeColor = (color, percent) => {

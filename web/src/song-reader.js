@@ -1,9 +1,10 @@
-import { midiKeyCodeToNoteCode, notInDFlatMajor, uniqByNoteNumber, mergeMoments, zipBy } from './utils'
+import _ from 'lodash'
+import { midiKeyCodeToOctavelessNote, getIsWhiteKey, midiKeyCodeToNoteCode, notInDFlatMajor, uniqByNoteNumber, mergeMoments, zipBy } from './utils'
 
 export default class SongReader {
   constructor(midiData) {
-    this.rightHand = new MomentsIterator(midiData.tracks[1])
-    this.leftHand = new MomentsIterator(midiData.tracks[2])
+    this.rightHand = new MomentsIterator(midiData.tracks[1], 'right')
+    this.leftHand = new MomentsIterator(midiData.tracks[2], 'left')
   }
 
   *[Symbol.iterator]() {
@@ -11,8 +12,8 @@ export default class SongReader {
   }
 }
 
-function * MomentsIterator(midiTrack) {
-  const notes = midiTrack.map(note => new MidiNote(note))
+function * MomentsIterator(midiTrack, hand) {
+  const notes = midiTrack.map(note => new MidiNote(note, hand))
 
   const advanceCursor = () => {
     if (!currentNote) return
@@ -43,8 +44,11 @@ function * MomentsIterator(midiTrack) {
 }
 
 export class MidiNote {
-  constructor(note) {
+  constructor(note, hand) {
     _.extend(this, note)
+    this.hand = hand
+    if (this.noteNumber) this.octavelessNote = midiKeyCodeToOctavelessNote(this.noteNumber)
     if (notInDFlatMajor(this.noteNumber)) this.accidental = true
+    if (getIsWhiteKey(this)) this.isWhiteKey = true
   }
 }

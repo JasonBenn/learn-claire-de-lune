@@ -10,7 +10,8 @@ body {
 }
 
 .container {
-  width: 1000px;
+  display: flex;
+  justify-content: center;
   margin: 2em auto;
 }
 
@@ -19,14 +20,35 @@ body {
 }
 
 canvas {
-  margin-top: 2em;
-  border: 1px solid black;
+  border: 1px solid lightgray;
 }
 
 .bookmarks {
   canvas {
-    border-color: #888;
+    border-color: lightgray;
     height: 200px;
     margin: 5px;
   }
+}
+
+.control-pane {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  border: 1px solid lightgray;
+  margin-right: 1em;
+  padding: 1em;
+  > * {
+    margin-bottom: 0.75em;
+  }
+}
+
+p {
+  margin: 0;
+}
+
+hr {
+  width: 100%;
 }

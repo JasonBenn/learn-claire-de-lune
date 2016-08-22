@@ -22,6 +22,7 @@ class Draw {
   prepareCircle(x, y, color) {
     this.ctx.beginPath();
     this.ctx.arc(x, y, NOTE_RADIUS, 0, 2 * Math.PI, false);
+    this.ctx.strokeStyle = color;
     this.ctx.fillStyle = color;
   }
 
@@ -31,7 +32,7 @@ class Draw {
   }
 
   emptyCircle(x, y, color) {
-    this.prepareCircle(x, y, shadeColor(color, 10))
+    this.prepareCircle(x, y, color)
     this.ctx.stroke()
   }
 
@@ -62,8 +63,9 @@ class Draw {
 }
 
 export default class DrawMusic extends Draw {
-  constructor(canvas) {
+  constructor(canvas, settings) {
     super(canvas)
+    this.settings = settings
   }
 
   staff() {
@@ -87,10 +89,17 @@ export default class DrawMusic extends Draw {
     this.drawText(x, y, '♮', color)
   }
 
-  note(noteNumber, color, time, accidental) {
+  note(noteNumber, color, time, accidental, isWhiteKey, hand) {
     const noteTop = STAFF_TOP - whiteKeysDistance(noteNumber) * GAP_BETWEEN_LINES / 2
+    if (hand === 'left' && this.settings().handMode === 'right') color = colors.GRAY
+    if (hand === 'right' && this.settings().handMode === 'left') color = colors.GRAY
+
     if (accidental) this.drawNatural(time + ACCIDENTAL_X_OFFSET, noteTop, color)
-    this.circle(time, noteTop, color)
+    if (isWhiteKey && this.settings().whiteKeysMode) {
+      this.emptyCircle(time, noteTop, color)
+    } else {
+      this.circle(time, noteTop, color)
+    }
   }
 
   peekedNote(noteNumber, color, time, accidental) {
@@ -102,9 +111,9 @@ export default class DrawMusic extends Draw {
 
   moments(moments) {
     moments.forEach(({totalTicks, chord}) => {
-      chord.forEach(({noteNumber, accidental, color = colors.BLACK}) => {
+      chord.forEach(({noteNumber, accidental, isWhiteKey, color = colors.BLACK, hand}) => {
         if (keyNotOnPiano(noteNumber)) color = colors.GRAY
-        this.note(noteNumber, color, ticksToPx(totalTicks), accidental)
+        this.note(noteNumber, color, ticksToPx(totalTicks), accidental, isWhiteKey, hand)
       })
     })
   }

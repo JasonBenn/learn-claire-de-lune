@@ -8,12 +8,13 @@ const PEDAL_CODE_A = 176
 const PEDAL_CODE_B = 177
 const TIMING_CLOCK = 248
 const PAN_STARTING_OFFSET_PX = 500
-const HARD_MODE = false
 
 export default class Trainer {
-  constructor(canvas, moments) {
-    this.draw = new DrawMusic(canvas)
+  constructor(canvas, moments, settings) {
+    this.draw = new DrawMusic(canvas, settings)
+
     this.moments = moments
+    this.settings = settings
 
     this.errorTime = 0
     this.currentTime = 0
@@ -21,6 +22,8 @@ export default class Trainer {
     this.incorrectNotes = {}
     this.incorrectNotesCount = 0
     this.correctNotesCount = 0
+
+    this.onSuccess = function() {}
 
     this.index = -1
 
@@ -44,13 +47,13 @@ export default class Trainer {
   }
 
   resetColors(fromTick = 0) {
-    const fromIndex = this.moments.findIndex(moment => moment.totalTicks === fromTick)
+    const fromIndex = this.moments.findIndex(moment => moment.totalTicks >= fromTick)
     range(fromIndex, this.moments.length).forEach(partial(::this.setChordColor, colors.BLACK))
   }
 
   setToTick(tick) {
     this.resetColors(tick)
-    this.index = this.moments.findIndex(moment => moment.totalTicks === tick)
+    this.index = this.moments.findIndex(moment => moment.totalTicks >= tick)
     this.panToTick(tick)
   }
 
@@ -108,11 +111,18 @@ export default class Trainer {
   }
 
   currentChordTicks() {
-    return this.moments[this.index].totalTicks
+    return this.currentMoment().totalTicks
   }
 
   currentChord() {
-    return this.moments[this.index].chord
+    const chord = this.currentMoment().chord
+    if (this.settings().handMode === 'left') return _.filter(chord, note => note.hand === 'left')
+    if (this.settings().handMode === 'right') return _.filter(chord, note => note.hand === 'right')
+    return chord
+  }
+
+  currentMoment() {
+    return this.moments[this.index]
   }
 
   nextChordPx() {
@@ -156,13 +166,17 @@ export default class Trainer {
     if (this.correctNotesCount === currentChordLength && !this.incorrectNotesCount) {
       this.correctNotesCount = 0
       this.incorrectNotesCount = 0;
-
-      (HARD_MODE ? ::this.maybeTryLastNoteAgain : ::this.updateChord)()
-
+      (this.settings().hardMode ? ::this.maybeTryLastNoteAgain : ::this.updateChord)()
     } else if (this.incorrectNotesCount && !this.alreadyTryingAgain) {
       this.tryAgain = true
       this.alreadyTryingAgain = true
     }
+  }
+
+  logCurrentDeltaTime() {
+    console.log('current:', this.currentChordTicks(), this.currentChord(), this.index);
+    var nextChord = this.moments[this.index + 1]
+    console.log('next:', nextChord.totalTicks, nextChord.chord, this.index + 1);
   }
 
   maybeTryLastNoteAgain() {
