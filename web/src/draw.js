@@ -94,6 +94,10 @@ export default class DrawMusic extends Draw {
     if (hand === 'left' && this.settings().handMode === 'right') color = colors.GRAY
     if (hand === 'right' && this.settings().handMode === 'left') color = colors.GRAY
 
+    if (!color && hand === 'left' && this.settings().handMode === 'differentiate') color = colors.DARK_TEAL
+    if (!color && hand === 'right' && this.settings().handMode === 'differentiate') color = colors.TEAL
+    if (!color) color = colors.BLACK
+
     if (accidental) this.drawNatural(time + ACCIDENTAL_X_OFFSET, noteTop, color)
     if (isWhiteKey && this.settings().whiteKeysMode) {
       this.emptyCircle(time, noteTop, color)
@@ -111,7 +115,7 @@ export default class DrawMusic extends Draw {
 
   moments(moments) {
     moments.forEach(({totalTicks, chord}) => {
-      chord.forEach(({noteNumber, accidental, isWhiteKey, color = colors.BLACK, hand}) => {
+      chord.forEach(({noteNumber, accidental, isWhiteKey, color, hand}) => {
         if (keyNotOnPiano(noteNumber)) color = colors.GRAY
         this.note(noteNumber, color, ticksToPx(totalTicks), accidental, isWhiteKey, hand)
       })

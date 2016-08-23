@@ -7,7 +7,12 @@ export const colors = {
   GREEN: '#bada55',
   RED: '#FF0000',
   BLACK: '#000000',
-  GRAY: '#888888'
+  GRAY: '#888888',
+  TEAL: 'rgb(124, 194, 193)',
+  DARK_TEAL: 'rgb(63, 94, 104)',
+  FOREST_GREEN: 'rgb(25, 69, 81)',
+  DARK_BLUE: 'rgb(24, 46, 78)',
+  MIDNIGHT: 'rgb(20, 28, 40)',
 }
 
 const NOTE_OFFSETS = {

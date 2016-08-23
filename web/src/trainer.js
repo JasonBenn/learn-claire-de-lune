@@ -48,7 +48,7 @@ export default class Trainer {
 
   resetColors(fromTick = 0) {
     const fromIndex = this.moments.findIndex(moment => moment.totalTicks >= fromTick)
-    range(fromIndex, this.moments.length).forEach(partial(::this.setChordColor, colors.BLACK))
+    range(fromIndex, this.moments.length).forEach(partial(::this.setChordColor, undefined))
   }
 
   setToTick(tick) {
@@ -151,7 +151,7 @@ export default class Trainer {
         correctNotePlayed.color = colors.GREEN
       } else {
         this.correctNotesCount = Math.max(this.correctNotesCount - 1, 0)
-        correctNotePlayed.color = colors.BLACK
+        delete correctNotePlayed.color
       }
     } else {
       if (velocity) {
