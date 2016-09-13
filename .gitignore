@@ -1,4 +1,6 @@
 npm-debug.log
 web/build
 web/node_modules
-api/node_modules
+*.pyc
+staticfiles
+.env

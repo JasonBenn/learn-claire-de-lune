@@ -1,2 +1,2 @@
+app: gunicorn gettingstarted.wsgi --log-file -
 web: cd web && npm start
-api: cd api && npm start
