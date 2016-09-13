@@ -9,7 +9,7 @@ import ControlPane from './control-pane'
 import { each, partial } from 'lodash'
 import { ticksToPx, ifSpaceBar, ifEnter } from './utils'
 
-const bookmarks = [90000, 19680, 26640, 30600, 34920, 60360, 77400, 77640, 85500]
+const bookmarks = [90000, 86100, 0, 19680, 26640, 30600, 34920, 60360, 77400, 77640, 85500]
 const START_POINT = bookmarks[0]
 
 const renderBookmark = (moments, settings, bookmark, i) => {
