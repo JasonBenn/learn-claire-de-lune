@@ -10,4 +10,7 @@ def index(request):
     })
 
 
-# Create your views here.
+def performances(request):
+    performances = Performance.objects.all()
+    return JsonResponse(performances)
+
