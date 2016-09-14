@@ -137,3 +137,5 @@ STATICFILES_DIRS = (
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
+# Always use IPython for shell_plus
+SHELL_PLUS = "ipython"

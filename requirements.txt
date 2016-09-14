@@ -4,10 +4,29 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
+appnope==0.1.0            # via ipython
+backports.shutil-get-terminal-size==1.0.0  # via ipython
+decorator==4.0.10         # via ipython, traitlets
 dj-database-url==0.4.0
 django-extensions==1.7.4
 Django==1.9.2
+enum34==1.1.6             # via traitlets
 gunicorn==19.4.5
+ipython-genutils==0.1.0   # via traitlets
+ipython==5.1.0
+pathlib2==2.1.0           # via ipython, pickleshare
+pexpect==4.2.1            # via ipython
+pickleshare==0.7.4        # via ipython
+prompt-toolkit==1.0.7     # via ipython
 psycopg2==2.6.1
-six==1.10.0               # via django-extensions
+ptyprocess==0.5.1         # via pexpect
+pygments==2.1.3           # via ipython
+simplegeneric==0.8.1      # via ipython
+six==1.10.0               # via django-extensions, pathlib2, prompt-toolkit, traitlets
+traitlets==4.3.0          # via ipython
+wcwidth==0.1.7            # via prompt-toolkit
 whitenoise==2.0.6
+
+# The following packages are commented out because they are
+# considered to be unsafe in a requirements file:
+# setuptools                # via ipython
