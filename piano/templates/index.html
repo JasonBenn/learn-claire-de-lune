@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sight Reading Trainer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="container">
+  <div class="control-pane">
+    <div class="scoreboard">
+      <div class="progress">
+        <span>progress</span>
+        <span class="value">0.0%</span>
+      </div>
+    </div>
+    <div>
+      <label for="hard-mode">Hard Mode</label>
+      <input type="checkbox" name="hard_mode" id="hard-mode">
+    </div>
+
+    <div>
+      <label for="white-keys-mode">White Keys Mode</label>
+      <input type="checkbox" name="white_keys_mode" id="show-white-keys-mode" checked>
+    </div>
+
+    <div>
+      <label for="hand-mode">Hand Mode</label>
+      <select name="hand_mode" id="hand-mode">
+        <option value="">Both</option>
+        <option value="left">Only Left</option>
+        <option value="right">Only Right</option>
+        <option selected value="differentiate">Differentiate</option>
+      </select>
+    </div>
+
+    <hr>
+
+    <p>Hold space for Peek Mode</p>
+    <p>Press Enter to skip chord</p>
+    <p>Click a bookmark to load it</p>
+    <p>Click canvas to print current chord info</p>
+  </div>
+  <canvas width="1000px" height="600px" id="sheet-music"></canvas>
+</div>
+<div class="bookmarks"></div>
+<script src="assets/bundle.js"></script>
+{#<script>app.bookmarks = {% bookmarks %}</script>#}
+</body>
+</html>
