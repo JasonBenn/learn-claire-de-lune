@@ -5,3 +5,4 @@ client/node_modules
 staticfiles
 .env
 .idea
+*.sqlite3
