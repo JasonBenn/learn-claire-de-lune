@@ -36,21 +36,6 @@ module.exports = {
     filename: "bundle.js"
   },
 
-  devServer: {
-    proxy: {
-      '/api/*': 'http://localhost:3000/',
-      headers: { "Access-Control-Allow-Origin": "*" }
-    },
-    historyApiFallback: true, // history fallthrough lets React Router handle routing
-    noInfo: true, // makes webpack less verbose
-    hot: true,
-    inline: true
-  },
-
-  plugins: [
-    new webpack.HotModuleReplacementPlugin()
-  ],
-
   node: {
     fs: 'empty'
   },
