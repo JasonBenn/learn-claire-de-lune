@@ -43,8 +43,9 @@
   </div>
   <canvas width="1000px" height="600px" id="sheet-music"></canvas>
 </div>
+{% load static %}
 <div class="bookmarks"></div>
-<script src="assets/bundle.js"></script>
-{#<script>app.bookmarks = {% bookmarks %}</script>#}
+<script src="{% static 'bundle.js' %}"></script>
+<script>var bookmarks = {{bookmarks}};</script>
 </body>
 </html>
