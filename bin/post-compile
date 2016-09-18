@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+echo "=> Performing database migrations..."
+python manage.py migrate
+
+echo "=> Bundling assets..."
+(cd client && webpack)

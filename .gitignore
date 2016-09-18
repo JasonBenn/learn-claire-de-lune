@@ -6,3 +6,4 @@ staticfiles
 .env
 .idea
 *.sqlite3
+gettingstarted/static/bundle*

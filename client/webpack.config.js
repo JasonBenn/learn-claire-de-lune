@@ -31,8 +31,7 @@ module.exports = {
   },
 
   output: {
-    path: "./build",
-    publicPath: "/assets/", // Files in build/ are exposed to index.html at assets/.
+    path: "../gettingstarted/static",
     filename: "bundle.js"
   },
 
