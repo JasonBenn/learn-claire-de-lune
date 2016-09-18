@@ -4,7 +4,7 @@ from piano.models import Bookmark, Performance
 
 
 def index(request):
-    bookmarks = Bookmark.objects.all()
+    bookmarks = Bookmark.objects.all().values_list('start_location', flat=True)
     return render(request, 'index.html', {
         'bookmarks': bookmarks
     })
