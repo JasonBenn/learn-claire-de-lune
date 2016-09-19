@@ -25,7 +25,7 @@ const logMoments = (moments, chordLength) => {
 }
 
 async function main() {
-  const midiData = await $.get('api/claire')
+  const midi = await $.get('https://s3-us-west-2.amazonaws.com/sight-reading-trainer/claire-de-lune.mid')
   const songReader = new SongReader(midiData)
   const moments = Array.from(songReader)
   const canvas = document.getElementById("sheet-music")
