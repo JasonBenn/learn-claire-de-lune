@@ -1,5 +1,6 @@
 var webpack = require('webpack')
 var path = require('path')
+var BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
   module: {
@@ -31,9 +32,13 @@ module.exports = {
   },
 
   output: {
-    path: "../gettingstarted/static",
-    filename: "bundle.js"
+    path: "../assets/webpack_bundles/",
+    filename: "[name]-[hash].js"
   },
+
+  plugins: [
+    new BundleTracker({filename: './webpack-stats.json'})
+  ],
 
   node: {
     fs: 'empty'
