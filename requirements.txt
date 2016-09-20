@@ -9,6 +9,7 @@ backports.shutil-get-terminal-size==1.0.0  # via ipython
 decorator==4.0.10         # via ipython, traitlets
 dj-database-url==0.4.0
 django-extensions==1.7.4
+django-webpack-loader==0.3.3
 Django==1.9.2
 enum34==1.1.6             # via traitlets
 gunicorn==19.4.5
