@@ -14,18 +14,18 @@
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-stage-0": "^6.3.13",
     "jquery": "^2.1.4",
-    "lodash": "*",
+    "lodash": "^4.16.2",
     "normalize.css": "*"
   },
   "devDependencies": {
-    "postcss-loader": "*",
     "css-loader": "*",
     "node-sass": "*",
+    "postcss-loader": "*",
     "sass-loader": "*",
     "style-loader": "*",
     "tape": "^4.2.0",
     "webpack": "*",
-    "webpack-dev-server": "*"
+    "webpack-bundle-tracker": "0.0.93"
   },
   "author": "",
   "license": "ISC"
