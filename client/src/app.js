@@ -20,12 +20,8 @@ const renderBookmark = (moments, settings, bookmark, i) => {
   draw.moments(moments)
 }
 
-const logMoments = (moments, chordLength) => {
-  console.log(moments.filter(moment => moment.chord.length > chordLength).map(moment => moment.totalTicks))
-}
-
 async function main() {
-  const midi = await $.get('https://s3-us-west-2.amazonaws.com/sight-reading-trainer/claire-de-lune.mid')
+  const midiData = await $.get('https://s3-us-west-2.amazonaws.com/sight-reading-trainer/claire-de-lune.mid')
   const songReader = new SongReader(midiData)
   const moments = Array.from(songReader)
   const canvas = document.getElementById("sheet-music")
