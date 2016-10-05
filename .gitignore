@@ -6,6 +6,7 @@ staticfiles
 .env
 .idea
 *.sqlite3
+.env
 
 assets/webpack_bundles
 client/webpack-stats.json
