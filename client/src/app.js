@@ -8,6 +8,7 @@ import DrawMusic from './draw'
 import ControlPane from './control-pane'
 import { each, partial } from 'lodash'
 import { ticksToPx, ifSpaceBar, ifEnter } from './utils'
+import { parseArrayBuffer } from './midi-json-parser/src/module.js'
 
 const START_POINT = bookmarks[0]
 
@@ -21,8 +22,9 @@ const renderBookmark = (moments, settings, bookmark, i) => {
 }
 
 async function main() {
-  const midiData = await $.get('https://s3-us-west-2.amazonaws.com/sight-reading-trainer/claire-de-lune.mid')
-  const songReader = new SongReader(midiData)
+  const midiFile = await $.get('https://s3-us-west-2.amazonaws.com/sight-reading-trainer/claire-de-lune.mid')
+  const midiJSON = await parseArrayBuffer(ArrayBuffer(midiFile))
+  const songReader = new SongReader(midiJSON)
   const moments = Array.from(songReader)
   const canvas = document.getElementById("sheet-music")
   const controlPane = new ControlPane()
