@@ -9,7 +9,7 @@ import ControlPane from './control-pane'
 import { each, partial } from 'lodash'
 import { ticksToPx, ifSpaceBar, ifEnter } from './utils'
 // import midiFileParser from 'midi-file-parser'
-import { parseArrayBuffer } from 'midi-json-parser'
+import { parseArrayBuffer } from '../midi-json-parser/src/parser/midi-file'
 
 const START_POINT = bookmarks[0]
 
