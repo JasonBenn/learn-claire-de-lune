@@ -143,7 +143,7 @@
         "acorn": {
           "version": "1.2.2",
           "from": "acorn@>=1.0.3 <2.0.0",
-          "resolved": "http://registry.npmjs.org/acorn/-/acorn-1.2.2.tgz"
+          "resolved": "https://registry.npmjs.org/acorn/-/acorn-1.2.2.tgz"
         }
       }
     },
@@ -2791,9 +2791,14 @@
       "resolved": "http://registry.npmjs.org/micromatch/-/micromatch-2.3.11.tgz",
       "dev": true
     },
+    "midi-file-parser": {
+      "version": "1.0.0",
+      "from": "midi-file-parser@latest",
+      "resolved": "http://registry.npmjs.org/midi-file-parser/-/midi-file-parser-1.0.0.tgz"
+    },
     "midi-json-parser": {
       "version": "1.0.0",
-      "from": "midi-json-parser@latest",
+      "from": "http://registry.npmjs.org/midi-json-parser/-/midi-json-parser-1.0.0.tgz",
       "resolved": "http://registry.npmjs.org/midi-json-parser/-/midi-json-parser-1.0.0.tgz"
     },
     "mime-db": {

@@ -8,7 +8,8 @@ import DrawMusic from './draw'
 import ControlPane from './control-pane'
 import { each, partial } from 'lodash'
 import { ticksToPx, ifSpaceBar, ifEnter } from './utils'
-import { parseArrayBuffer } from './midi-json-parser/src/module.js'
+// import midiFileParser from 'midi-file-parser'
+import { parseArrayBuffer } from 'midi-json-parser'
 
 const START_POINT = bookmarks[0]
 
@@ -21,9 +22,32 @@ const renderBookmark = (moments, settings, bookmark, i) => {
   draw.moments(moments)
 }
 
+const binaryDownload = (url) => {
+  const promise = $.Deferred()
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true)
+  xhr.responseType = 'arraybuffer'
+
+  xhr.onload = function(e) {
+    if (this.status == 200) {
+      promise.resolve(this.response)
+    }
+  };
+
+  xhr.send()
+  return promise
+}
+
 async function main() {
-  const midiFile = await $.get('https://s3-us-west-2.amazonaws.com/sight-reading-trainer/claire-de-lune.mid')
-  const midiJSON = await parseArrayBuffer(ArrayBuffer(midiFile))
+  const midiFile = await binaryDownload('https://s3-us-west-2.amazonaws.com/sight-reading-trainer/claire-de-lune.mid')
+  // const midiFile = await $.get('https://s3-us-west-2.amazonaws.com/sight-reading-trainer/claire-de-lune.mid')
+
+  // Ugh, this is a big clusterfuck. I could fork this library, make it work with ArrayBuffers, and hope that does it.
+  // var midiJSON = midiFileParser(midiFile);
+
+
+  // This has a better chance of working, I think. Pass the arrayBuffer to this lib.
+  const midiJSON = await parseArrayBuffer(midiFile)
   const songReader = new SongReader(midiJSON)
   const moments = Array.from(songReader)
   const canvas = document.getElementById("sheet-music")

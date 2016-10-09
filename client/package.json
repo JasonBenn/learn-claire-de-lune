@@ -15,7 +15,8 @@
     "babel-preset-stage-0": "^6.3.13",
     "jquery": "^2.1.4",
     "lodash": "^4.16.2",
-    "midi-json-parser": "^1.0.0",
+    "midi-file-parser": "^1.0.0",
+    "midi-json-parser": "http://registry.npmjs.org/midi-json-parser/-/midi-json-parser-1.0.0.tgz",
     "normalize.css": "*"
   },
   "devDependencies": {
