@@ -9,6 +9,7 @@ import ControlPane from './control-pane'
 import { each, partial } from 'lodash'
 import { ticksToPx, ifSpaceBar, ifEnter } from './utils'
 
+if (!bookmarks.length) bookmarks = [0]
 const START_POINT = bookmarks[0]
 
 const renderBookmark = (moments, settings, bookmark, i) => {
