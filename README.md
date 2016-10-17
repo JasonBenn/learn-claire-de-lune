@@ -34,3 +34,12 @@ To do:
 - determine note lengths from noteOff midi data and render
 - bugfix: detect and fix impossible chords
 - scaled mode: music-theory-aware algorithm that turns notes "off" for beginners. detects root note for a particular passage (mostly D flat for claire de lune, but sometimes I've seen G flat or A flat. dumbest thing that might work: look at left hand lowest note?) favoring root notes, major thirds, perfect fifths, & minor sevenths in chords and arpeggios. dynamically turns notes back on as you play better. goal is to play in time at any skill level.
+
+trainer.js:177 current: 77880 [MidiNote] 358
+trainer.js:179 next: 78000 [MidiNote] 359
+"stuck right before this note"
+trainer.js:177 current: 84000 [MidiNote] 409
+trainer.js:179 next: 84120 [MidiNote] 410
+trainer.js:177 current: 84240 [MidiNote, MidiNote] 411
+trainer.js:179 next: 84360 [MidiNote] 412
+"another sticky point - no note"
