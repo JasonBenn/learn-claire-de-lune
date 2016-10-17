@@ -19,7 +19,7 @@ pathlib2==2.1.0           # via ipython, pickleshare
 pexpect==4.2.1            # via ipython
 pickleshare==0.7.4        # via ipython
 prompt-toolkit==1.0.7     # via ipython
-psycopg2==2.6.1
+Psycopg2==2.6.1
 ptyprocess==0.5.1         # via pexpect
 pygments==2.1.3           # via ipython
 simplegeneric==0.8.1      # via ipython
