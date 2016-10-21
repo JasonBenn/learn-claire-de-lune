@@ -7,3 +7,4 @@ django-extensions==1.7.4
 ipython==5.1.0
 django-webpack-loader==0.3.3
 Psycopg2
+djangorestframework

@@ -11,6 +11,7 @@ dj-database-url==0.4.0
 django-extensions==1.7.4
 django-webpack-loader==0.3.3
 Django==1.9.2
+djangorestframework==3.5.0
 enum34==1.1.6             # via traitlets
 gunicorn==19.4.5
 ipython-genutils==0.1.0   # via traitlets
