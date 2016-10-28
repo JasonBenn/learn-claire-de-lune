@@ -32,6 +32,8 @@ export default class Trainer {
     this.updateChord()
     this.unpause()
     this.render(Date.now())
+
+    this.currentPlayId = getCurrentPlayId()
   }
 
   activatePeekMode() {

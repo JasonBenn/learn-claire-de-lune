@@ -7,7 +7,7 @@ import SongReader from './song-reader'
 import DrawMusic from './draw'
 import ControlPane from './control-pane'
 import { each, partial } from 'lodash'
-import { ticksToPx, ifSpaceBar, ifEnter } from './utils'
+import { uuid, ticksToPx, ifSpaceBar, ifEnter } from './utils'
 
 if (!bookmarks.length) bookmarks = [0]
 const START_POINT = bookmarks[0]
