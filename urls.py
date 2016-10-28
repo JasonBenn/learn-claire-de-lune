@@ -3,13 +3,12 @@ from django.contrib import admin
 from piano import views
 from rest_framework import routers
 
-from piano.views import PlayViewSet, PlayedChordViewSet
+from piano.views import PlayedChordViewSet
 
 admin.autodiscover()
 
 # # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
-router.register(r'plays', PlayViewSet)
 router.register(r'played-chords', PlayedChordViewSet)
 
 urlpatterns = [

@@ -114,13 +114,10 @@ export const friendlyChord = chord => {
 const MS_TO_PX_RATIO = 5
 const TICKS_TO_PX_RATIO = 5
 
-export const ticksToPx = (ticks) => {
-  return ticks / TICKS_TO_PX_RATIO
-}
-
-export const msToPx = (ms) => {
-  return ms / MS_TO_PX_RATIO
-}
+export const ticksToPx = ticks => ticks / TICKS_TO_PX_RATIO
+export const msToPx = ms => ms / MS_TO_PX_RATIO
+export const pxToMs = px => px * MS_TO_PX_RATIO
+export const ticksToMs = ticks => pxToMs(ticksToPx(ticks))
 
 export const keyNotOnPiano = (noteNumber) => {
   return noteNumber < LOWEST_NOTE || noteNumber > HIGHEST_NOTE
@@ -173,12 +170,11 @@ export const uuid = () => {
   return uuid
 }
 
-export const getCurrentPlayId = () => {
-  // Each browser session is a "play".
-  let currentPlayId = sessionStorage.getItem("currentPlay")
-  if (!currentPlayId) {
-    currentPlayId = uuid()
-    sessionStorage.setItem("currentPlay", currentPlayId)
+export const getCurrentSessionId = () => {
+  let currentSessionId = sessionStorage.getItem("currentSessionId")
+  if (!currentSessionId) {
+    currentSessionId = uuid()
+    sessionStorage.setItem("currentSessionId", currentSessionId)
   }
-  return currentPlayId
+  return currentSessionId
 }

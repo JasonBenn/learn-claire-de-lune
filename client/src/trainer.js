@@ -2,7 +2,7 @@ import { floor, range, partial, each, filter, find, pluck, uniq } from 'lodash'
 import $ from 'jquery'
 import DrawMusic from './draw'
 import { MidiNote } from './song-reader'
-import { keyNotOnPiano, midiKeyCodeToNoteCode, friendlyChord, ticksToPx, msToPx, colors, greenNotesInMoment, toPercent } from './utils'
+import { ticksToMs, getCurrentSessionId, uuid, keyNotOnPiano, ticksToPx, msToPx, colors, greenNotesInMoment, toPercent } from './utils'
 
 const PEDAL_CODE_A = 176
 const PEDAL_CODE_B = 177
@@ -33,7 +33,7 @@ export default class Trainer {
     this.unpause()
     this.render(Date.now())
 
-    this.currentPlayId = getCurrentPlayId()
+    this.currentSessionId = getCurrentSessionId()
   }
 
   activatePeekMode() {
@@ -101,6 +101,7 @@ export default class Trainer {
     if (this.currentChordOutOfRange()) {
       this.updateChord()
     }
+    this.nextChordTime = this.idealNextChordTime()
   }
 
   currentChordOutOfRange() {
@@ -141,6 +142,34 @@ export default class Trainer {
     requestAnimationFrame(this.render.bind(this))
   }
 
+  postChordPlayed() {
+    const delay = Date.now() - this.nextChordTime
+    if (delay < 0) {
+      // console.log(`Ideal time ${this.nextChordTime} beat by ${delay}!`);
+      this.nextChordTime = this.idealNextChordTime() - delay
+      // console.log(`Set nextChordTime to ${this.nextChordTime}, which is in ${this.nextChordTime - Date.now()}`);
+    } else {
+      // console.log(`This note was played after a pause. nextChordTime is ${this.nextChordTime}, which is in ${this.nextChordTime - Date.now()}`);
+      this.nextChordTime = this.idealNextChordTime()
+    }
+
+    // console.log(`Posting delay of ${delay}`);
+    
+    $.post('/api/played-chords/', {
+      id: uuid(),
+      session: this.currentSessionId,
+      total_ticks: this.currentMoment().totalTicks,
+      delay: delay
+    });
+  }
+
+  idealNextChordTime() {
+    const currentChordTicks = this.currentMoment().totalTicks
+    const nextChordTicks = this.moments[this.index + 1].totalTicks
+    const ticksTilNextChord = nextChordTicks - currentChordTicks
+    return ticksToMs(ticksTilNextChord) + Date.now()
+  }
+
   onMidiMessage(msg, correctCb, incorrectCb) {
     const [eventType, noteNumber, velocity] = msg.data
     if (eventType === PEDAL_CODE_A || eventType === PEDAL_CODE_B || eventType === TIMING_CLOCK) return
@@ -167,7 +196,10 @@ export default class Trainer {
 
     if (this.correctNotesCount === currentChordLength && !this.incorrectNotesCount) {
       this.correctNotesCount = 0
-      this.incorrectNotesCount = 0;
+      this.incorrectNotesCount = 0
+
+      this.postChordPlayed();
+
       (this.settings().hardMode ? ::this.maybeTryLastNoteAgain : ::this.updateChord)()
     } else if (this.incorrectNotesCount && !this.alreadyTryingAgain) {
       this.tryAgain = true
