@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.http import JsonResponse
-from piano.models import Bookmark, Performance
+from piano.models import Bookmark, Play, PlayedChord
+from rest_framework import serializers, viewsets
 
 
 def index(request):
@@ -10,7 +10,23 @@ def index(request):
     })
 
 
-def performances(request):
-    performances = Performance.objects.all()
-    return JsonResponse(performances)
+class PlaySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Play
+        exclude = ('created_on', 'updated_on')
 
+
+class PlayViewSet(viewsets.ModelViewSet):
+    queryset = Play.objects.all()
+    serializer_class = PlaySerializer
+
+
+class PlayedChordSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = PlayedChord
+        exclude = ('created_on', 'updated_on')
+
+
+class PlayedChordViewSet(viewsets.ModelViewSet):
+    queryset = PlayedChord.objects.all()
+    serializer_class = PlayedChordSerializer
