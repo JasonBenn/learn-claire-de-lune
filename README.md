@@ -20,6 +20,7 @@ To do:
 - differentiate hand mode: show which notes should be played w left hand vs right hand
 - live updating control panel to toggle above modes
 === ABOVE THIS LINE IS DONE ===
+- Bugfix: every PlayedChord had a unique session UUID?
 - scoreboard: accuracy %
 - scoreboard: timing %
 - persist scores to backend
