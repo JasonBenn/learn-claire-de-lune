@@ -12,7 +12,7 @@ const PAN_STARTING_OFFSET_PX = 500
 export default class Trainer {
   constructor(draw, moments, settings) {
     this.draw = draw
-    this.$canvas = this.draw.$canvas
+    this.$canvas = $(this.draw.canvas)
 
     this.moments = moments
     this.settings = settings
