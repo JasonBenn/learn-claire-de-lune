@@ -10,8 +10,9 @@ const TIMING_CLOCK = 248
 const PAN_STARTING_OFFSET_PX = 500
 
 export default class Trainer {
-  constructor(canvas, moments, settings) {
-    this.draw = new DrawMusic(canvas, settings)
+  constructor(draw, moments, settings) {
+    this.draw = draw
+    this.$canvas = this.draw.$canvas
 
     this.moments = moments
     this.settings = settings
@@ -111,6 +112,7 @@ export default class Trainer {
   unpause() {
     this.lastUnpausedTime = Date.now()
     this.paused = false
+    this.$canvas.trigger('unpause')
   }
 
   currentChordTicks() {
