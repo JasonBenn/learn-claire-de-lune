@@ -41,9 +41,16 @@
     <p>Click a bookmark to load it</p>
     <p>Click canvas to print current chord info</p>
   </div>
-  <canvas width="1000px" height="600px" id="sheet-music"></canvas>
+  <div class="bookmarks"></div>
 </div>
-<div class="bookmarks"></div>
+<canvas id="sheet-music"></canvas>
+<div class="parallax">
+  <div class="parallax-layer background sky"></div>
+  <div class="parallax-layer midground landscape"></div>
+  <div class="parallax-layer midground landscape landscape-2"></div>
+  <div class="parallax-layer foreground plants"></div>
+  <div class="parallax-layer foreground plants plants-2"></div>
+</div>
 <script>var bookmarks = {{bookmarks}};</script>
 {% load render_bundle from webpack_loader %}
 {% render_bundle 'app' %}

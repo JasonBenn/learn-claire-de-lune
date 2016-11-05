@@ -7,12 +7,17 @@ body {
   width: 100%;
   text-align: center;
   font-family: $open-sans;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 .container {
   display: flex;
   justify-content: center;
-  margin: 2em auto;
+  display: none;
 }
 
 .scoreboard {
@@ -20,7 +25,10 @@ body {
 }
 
 canvas {
-  border: 1px solid lightgray;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 
 .bookmarks {
@@ -51,4 +59,60 @@ p {
 
 hr {
   width: 100%;
+}
+
+.parallax {
+  height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  perspective: 300px;
+
+  .parallax-layer {
+    position: absolute;
+    height: 100vh;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .background {
+    width: 200vw;
+    transform: translateZ(-600px)  scale(3);
+  }
+
+  .midground {
+    width: 30vw;
+    height: 60vh;
+    transform: translateZ(-300px) scale(2);
+    bottom: -116px;  // TODO: what's the relationship here?
+  }
+
+  .foreground {
+    width: 50vw;
+    height: 25vh;
+    transform: translateZ(0);
+  }
+
+  .sky {
+    background-color: lightblue;
+  }
+
+  .landscape {
+    background-color: darkgreen;
+  }
+
+  .landscape-2 {
+    left: 2000px;
+    height: 75vh;
+    width: 50vw;
+  }
+
+  .plants {
+    background-color: greenyellow;
+  }
+
+  .plants-2 {
+    left: 1500px;
+  }
 }

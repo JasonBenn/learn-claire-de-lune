@@ -27,10 +27,9 @@ async function main() {
   const moments = Array.from(songReader)
   const canvas = document.getElementById("sheet-music")
   const controlPane = new ControlPane()
-  const trainer = new Trainer(canvas, moments, ::controlPane.settings)
-  window.trainer = trainer
   const draw = new DrawMusic(canvas, ::controlPane.settings)
   window.onresize = partial(requestAnimationFrame, ::draw.resizeCanvas)
+  const trainer = new Trainer(draw, moments, ::controlPane.settings)
   new Piano(::trainer.onMidiMessage)
   trainer.setToTick(START_POINT)
   each(bookmarks, partial(renderBookmark, moments, ::controlPane.settings))
@@ -41,6 +40,15 @@ async function main() {
   $(document).keydown(partial(ifSpaceBar, ::trainer.activatePeekMode))
   $(document).keyup(partial(ifSpaceBar, ::trainer.deactivatedPeekMode))
   $(document).keydown(partial(ifEnter, ::trainer.updateChord))
+
+  const MAX_SCROLL = 2000  // Where does this come from?  Probably something to do with the longest layer (in this
+  // case, the bg) and the window width.
+  const $parallax = $('.parallax')[0]
+  function scrollParallax() {
+    $parallax.scrollLeft += 10
+    if (!trainer.paused && $parallax.scrollLeft <= MAX_SCROLL) requestAnimationFrame(scrollParallax)
+  }
+  $('canvas').on('unpause', scrollParallax)
 }
 
 main()
