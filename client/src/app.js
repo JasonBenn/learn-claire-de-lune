@@ -29,6 +29,8 @@ async function main() {
   const controlPane = new ControlPane()
   const trainer = new Trainer(canvas, moments, ::controlPane.settings)
   window.trainer = trainer
+  const draw = new DrawMusic(canvas, ::controlPane.settings)
+  window.onresize = partial(requestAnimationFrame, ::draw.resizeCanvas)
   new Piano(::trainer.onMidiMessage)
   trainer.setToTick(START_POINT)
   each(bookmarks, partial(renderBookmark, moments, ::controlPane.settings))

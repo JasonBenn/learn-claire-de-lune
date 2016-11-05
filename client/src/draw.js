@@ -11,12 +11,21 @@ const ACCIDENTAL_FONT_SIZE = NOTE_RADIUS * 2.3
 
 class Draw {
   constructor(canvas) {
+    this.canvas = canvas
     this.ctx = canvas.getContext("2d");
-    this.canvasWidth = canvas.width;
-    this.canvasHeight = canvas.height;
     this.ctx.font = ACCIDENTAL_FONT_SIZE + 'px serif'
     this.ctx.textBaseline = 'middle'
     this.ctx.textAlign = 'center'
+    this.resizeCanvas()
+  }
+
+  resizeCanvas() {
+    const windowWidth = window.innerWidth
+    const windowHeight = window.innerHeight
+    this.canvas.width = windowWidth
+    this.canvasWidth = windowWidth
+    this.canvas.height = windowHeight
+    this.canvasHeight = windowHeight
   }
 
   prepareCircle(x, y, color) {
