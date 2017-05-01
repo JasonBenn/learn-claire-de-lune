@@ -7,7 +7,7 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         include: [
           path.resolve(__dirname, "src")
         ],
@@ -32,8 +32,8 @@ module.exports = {
   },
 
   output: {
-    path: "../assets/webpack_bundles/",
-    filename: "[name]-[hash].js"
+    path: path.resolve(__dirname, "../assets/webpack_bundles/"),
+    filename: "[name].js"
   },
 
   plugins: [

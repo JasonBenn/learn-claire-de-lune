@@ -15,7 +15,9 @@
     "babel-preset-stage-0": "^6.3.13",
     "jquery": "^2.1.4",
     "lodash": "^4.16.2",
-    "normalize.css": "*"
+    "normalize.css": "*",
+    "promise": "^7.1.1",
+    "webpack-dev-server": "^2.4.5"
   },
   "devDependencies": {
     "css-loader": "*",
