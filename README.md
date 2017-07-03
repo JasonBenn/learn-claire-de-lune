@@ -1,10 +1,7 @@
 ![cdl-inspiration](https://user-images.githubusercontent.com/2539761/27769241-1d9f86a8-5f26-11e7-9e3f-a016dcc1dd0c.png)
 
 # Learn Claire de Lune
-
-tl;dr: Rock Band for piano, but with different features, and for Claire de Lune.
-
-Plug your electronic piano into your computer with a USB-to-MIDI cable and get live feedback as you learn to play the undisputed best piano song ever written. No music theory required and several options for adjusting the difficulty are included (I built them in when I realized how badly I needed them).
+Plug your electronic piano into your computer with a USB-to-MIDI cable and get live feedback as you learn to play the undisputed best piano song ever written. No music theory required and several options for adjusting the difficulty are included (I built them in when I realized how badly I needed them). tl;dr: Rock Band for piano.
 
 OK, sure, there are many other apps for learning to play piano - but none are a) art and b) free. This app is a passion project, a homage, 🎶 this is just a tribute 🎶.
 
