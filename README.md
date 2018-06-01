@@ -1,76 +1,24 @@
-Mission: learn to play Claire de Lune smoothly, without looking at the keyboard, without memorizing the song (sightreading).
+![cdl-inspiration](https://user-images.githubusercontent.com/2539761/27769241-1d9f86a8-5f26-11e7-9e3f-a016dcc1dd0c.png)
 
-To do:
-- read from a midi file!
-- notes scroll across page
-- scrolling pauses until you get the chord right
-- played notes stay green
-- show incorrect notes
-- render accidentals
-- skip unplayable notes (if not playing on full keyboard)
-- hard mode: rewind one note when you mess up
-- hard mode: don't rewind indefinitely, fuck lol, just 1 at most
-- Bookmarks!!
-- peek mode: show note (i.e., e flat 4) instead of circle when holding spacebar
-- skipping to bookmark only resets played notes AFTER that tick, not all notes
-- scoreboard: progress %
-- enter key skips a note (there's one bug in the MIDI file that's impossible to play)
-- white keys mode: determine which notes are white keys vs black keys
-- hand modes: play only the left hand notes/right hand notes, skip the others
-- differentiate hand mode: show which notes should be played w left hand vs right hand
-- live updating control panel to toggle above modes
-=== ABOVE THIS LINE IS DONE ===
-- scoreboard: accuracy %
-- scoreboard: timing %
-- persist scores to backend
-- persist bookmarks to backend, add new ones by clicking
-- scoreboard: areas you fucked up the hardest, so you can play them over and over again. composite rating over all plays, weighting of each play rating decays with time
-- bugfix: better detection of connected piano so I don't have to do the unplug/replug dance
-- deploy on heroku or aws
-=== THIS IS MVP, POST ON FB ===
-- click and drag a section to loop playing that section for practice
-- rock-band style timing window - you can only hit the notes after they cross a dotted line. solid line is perfect timing. last dotted line is pause point.
-- modulate bpm according to midi data (show on scoreboard)
-- determine note lengths from noteOff midi data and render
-- bugfix: detect and fix impossible chords
-- scaled mode: music-theory-aware algorithm that turns notes "off" for beginners. detects root note for a particular passage (mostly D flat for claire de lune, but sometimes I've seen G flat or A flat. dumbest thing that might work: look at left hand lowest note?) favoring root notes, major thirds, perfect fifths, & minor sevenths in chords and arpeggios. dynamically turns notes back on as you play better. goal is to play in time at any skill level.
+# Learn Claire de Lune
+Plug your electronic piano into your computer with a USB-to-MIDI cable and get live feedback as you learn to play the undisputed best piano song ever written. No music theory required and several options for adjusting the difficulty are included (I built them in when I realized how badly I needed them). tl;dr: Rock Band for piano.
 
+OK, sure, there are many other apps for learning to play piano - but none are a) art and b) free. This app is a passion project, a homage, 🎶 this is just a tribute 🎶.
 
-Bugs:
+## Features
+* ✨ Correctly played notes are highlighted in green, incorrect notes are shown on the staff in red, and the sheet music will resume scrolling only once you’re playing the current chord or note correctly.
+* ⚪️ Unplayable notes (i.e., beyond the edge of an electronic piano with fewer than 88 keys) are automatically bypassed.
+* 👋 Left and right hand mode allow you to practice each hand independently.
+* 👐 Differentiated hand mode visually distinguishes notes for the left hand from notes for the right hand.
+* 🎹 White keys mode (my personal favorite) will visually distinguish white keys from black keys. Makes the song _much_ easier to play.
+* 😱 Hard mode forces you to replay the previous chord every time you make a mistake before allowing you to advance. The upshot is that you drill the transition from each chord to the next.
+* 🙈 Peek mode (hold the space bar) will display note values currently on the page.
+* 📚 Bookmarks allow you to skip to the parts of the song you most need to work on.
+* 😅 The enter key will allow you to skip to the next chord.
+* 💪 A meter above the top right corner shows your progress.
 
-stuck right before this note: 77880
-another sticky point - no note: 84000
-
-
-Ideas:
-
-https://oauth.io/home
-
-
-Notes:
-
-# Play session
-# percent
-# time start
-# time end
-# dont need these ^
-
-# Notes missed
-
-# Predict which notes I'll miss next
-# values: note number/time in song
-# time i hit the note
-# missed/hit
-
-# things i can infer, given the above:
-# accuracy so far
-# how many attempts i already had on that chord
-# difficulty of chord
-# number of accidentals in chord
-# number of white keys in chord
-# how long I spent waiting for that chord
-
-
-Commits:
-
-Measure the time to play a chord. Store these measurements in localStorage. Every 10s or on window unload, attempt to idempotently send the measurements to the backend, and if successful, clear the saved measurements from localStorage.
+## Wish List
+* 🤖 Drill mode: by tracking the notes a player hits and misses (and how long the player waited before playing the chord correctly and any incorrect attempts), calculate the most difficult measures for a player and allow them to drill those sections repeatedly, until their weaknesses are transformed into strengths.
+* 👶 Scaled mode: dynamically toggle notes to adapt to the player's skill so that they can always play in time, at the limit of their current ability, and still play something that sounds like Claire de Lune. The algorithm will be music-theory aware: the notes that will be disabled last are those that are most important to the sound of the chord or arpeggio, for example: the root and the third in an ordinary chord (which determines whether the chord has a major or minor sound), or the root and the fifth in an altered chord.
+* 💻 Preview mode: allow those without an electronic keyboard and USB-to-MIDI cable to click through the song - basically, the same thing as [Piano Flow](https://sunebear.github.io/Piano-Flow/#/pieces/Clair-de-Lune-via-Suite-Bergamasque-No-3) by [SuneBear](https://github.com/SuneBear/Piano-Flow). This'll be especially nice to have once the app is...
+* 🌌 An aesthetically beautiful experience: I'm looking to hire an animator to provide beautiful background art to scroll past the player as he plays the song; the foreground and midground would scroll at different rates to the background to provide the illusion of depth. The header image of this README are some of the things I find inspiring - imagine a hot air balloon trip by an alpine lake in the middle of the night, with moonbeams and shooting stars reflecting off the water. It's gotta be Fantasia 2000-level quality to do the song justice! Know of anyone at e.g. Pixar with time for a little work on the side? [Email me](mailto:jasoncbenn@gmail.com) :)
