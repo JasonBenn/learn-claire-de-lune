@@ -26,7 +26,7 @@
     "sass-loader": "*",
     "style-loader": "*",
     "tape": "^4.2.0",
-    "webpack": "*",
+    "webpack": "3.*",
     "webpack-bundle-tracker": "0.0.93"
   },
   "author": "",

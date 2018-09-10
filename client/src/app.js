@@ -9,8 +9,9 @@ import ControlPane from './control-pane'
 import { each, partial } from 'lodash'
 import { uuid, ticksToPx, ifSpaceBar, ifEnter } from './utils'
 
-const bookmarks = [0, 88000]
-const START_POINT = bookmarks[0]
+const bookmarks = [0, 56000, 88000]
+const loopEnds = [56300]
+const START_POINT = bookmarks[1]
 
 const renderBookmark = (moments, settings, bookmark, i) => {
   const canvas = $(`<canvas data-bookmark='${bookmark}' width='1000px' height='400px' class="bookmark ${i}" />`)[0]
