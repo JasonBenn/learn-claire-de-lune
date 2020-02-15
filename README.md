@@ -1,4 +1,4 @@
-![cdl-inspiration](https://user-images.githubusercontent.com/2539761/27769241-1d9f86a8-5f26-11e7-9e3f-a016dcc1dd0c.png)
+![image](https://user-images.githubusercontent.com/2539761/74596044-7d423580-4ffe-11ea-91e0-cf4f007a6476.png)
 
 # Learn Claire de Lune
 Plug your electronic piano into your computer with a USB-to-MIDI cable and get live feedback as you learn to play the undisputed best piano song ever written. No music theory required and several options for adjusting the difficulty are included (I built them in when I realized how badly I needed them). tl;dr: Rock Band for piano.
@@ -22,3 +22,5 @@ OK, sure, there are many other apps for learning to play piano - but none are a)
 * 👶 Scaled mode: dynamically toggle notes to adapt to the player's skill so that they can always play in time, at the limit of their current ability, and still play something that sounds like Claire de Lune. The algorithm will be music-theory aware: the notes that will be disabled last are those that are most important to the sound of the chord or arpeggio, for example: the root and the third in an ordinary chord (which determines whether the chord has a major or minor sound), or the root and the fifth in an altered chord.
 * 💻 Preview mode: allow those without an electronic keyboard and USB-to-MIDI cable to click through the song - basically, the same thing as [Piano Flow](https://sunebear.github.io/Piano-Flow/#/pieces/Clair-de-Lune-via-Suite-Bergamasque-No-3) by [SuneBear](https://github.com/SuneBear/Piano-Flow). This'll be especially nice to have once the app is...
 * 🌌 An aesthetically beautiful experience: I'm looking to hire an animator to provide beautiful background art to scroll past the player as he plays the song; the foreground and midground would scroll at different rates to the background to provide the illusion of depth. The header image of this README are some of the things I find inspiring - imagine a hot air balloon trip by an alpine lake in the middle of the night, with moonbeams and shooting stars reflecting off the water. It's gotta be Fantasia 2000-level quality to do the song justice! Know of anyone at e.g. Pixar with time for a little work on the side? [Email me](mailto:jasoncbenn@gmail.com) :)
+
+![cdl-inspiration](https://user-images.githubusercontent.com/2539761/27769241-1d9f86a8-5f26-11e7-9e3f-a016dcc1dd0c.png)
